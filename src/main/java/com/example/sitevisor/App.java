@@ -13,7 +13,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("app-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 900, 600);
+        Scene scene = new Scene(fxmlLoader.load(), 1200, 700);
         scene.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage.setTitle("SiteVisor");
         stage.setScene(scene);

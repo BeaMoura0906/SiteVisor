@@ -3,14 +3,21 @@ package Controller;
 import Model.Entity.Site;
 import Model.Manager.SiteManager;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.VBox;
 
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
+
+    @FXML
+    private VBox vBoxTableSites;
+
     @FXML
     private TableView<Site> tableSites;
 
@@ -18,36 +25,37 @@ public class Controller {
     private TableColumn<Site, Integer> idCol;
 
     @FXML
-    private TableColumn<Site, String> nameCol;
+    private TableColumn<Site, String> nameCol, typeCol, clientCol, addressCol, startDateCol, endDateCol;
 
     @FXML
-    private TableColumn<Site, String> typeCol;
+    private TextField nameSearch;
 
     @FXML
-    private TableColumn<Site, String> clientCol;
+    private TextField typeSearch;
 
     @FXML
-    private TableColumn<Site, String> addressCol;
+    private TextField clientSearch;
 
     @FXML
-    private TableColumn<Site, String> startDateCol;
+    private DatePicker startDateSearch;
 
     @FXML
-    private TableColumn<Site, String> endDateCol;
+    private DatePicker endDateSearch;
 
     @FXML
-    private TableColumn<Site, Integer> userIdCol;
+    private Button searchButton;
 
-    public void initialize() {
+    private List<Site> sites;
+
+    @FXML
+    private void onChangeTabSites() {
         SiteManager siteManager = new SiteManager();
-        List<Site> sites = siteManager.getAllSites();
-
-        for (Site site : sites) {
-            System.out.println(site.getName());
-        }
+        this.sites = siteManager.getAllSites();
 
         setUpTableView();
         tableSites.getItems().addAll(sites);
+
+        setRowDoubleClickListener();
     }
 
     private void setUpTableView() {
@@ -66,5 +74,80 @@ public class Controller {
         addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
         startDateCol.setCellValueFactory(new PropertyValueFactory<>("startDate"));
         endDateCol.setCellValueFactory(new PropertyValueFactory<>("endDate"));
+
+        tableSites.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        tableSites.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double totalWidth = newVal.doubleValue();
+
+            idCol.setPrefWidth(totalWidth * 0.05);
+            nameCol.setPrefWidth(totalWidth * 0.2);
+            typeCol.setPrefWidth(totalWidth * 0.15);
+            clientCol.setPrefWidth(totalWidth * 0.15);
+            addressCol.setPrefWidth(totalWidth * 0.25);
+            startDateCol.setPrefWidth(totalWidth * 0.1);
+            endDateCol.setPrefWidth(totalWidth * 0.1);
+        });
+    }
+
+    private void setRowDoubleClickListener() {
+        // Set row double-click listener
+        tableSites.setRowFactory(tv -> {
+            TableRow<Site> row = new TableRow<>();
+            row.setOnMouseClicked(event -> {
+                if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    Site selectedSite = row.getItem();
+                    handleRowDoubleClick(selectedSite);
+                }
+            });
+            return row;
+        });
+    }
+
+    private void handleRowDoubleClick(Site selectedSite) {
+        // Implement your action here when a row is double-clicked
+        System.out.println("Site double-clicked: " + selectedSite.getName());
+        // Example: Open a new window to display the site details
+    }
+
+    @FXML
+    private void onClickSearchButton() {
+        String name = nameSearch.getText();
+        String type = typeSearch.getText();
+        String client = clientSearch.getText();
+        LocalDate startLocalDate = startDateSearch.getValue();
+        LocalDate endLocalDate = endDateSearch.getValue();
+        String startDate = null;
+        String endDate = null;
+
+        if ( startLocalDate != null ) {
+            startDate = startLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        if ( endLocalDate != null ) {
+            endDate = endLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        List<Site> searchSites = new ArrayList<Site>();
+
+        for (Site site : this.sites) {
+            if ((site.getName().equals(name)) ||
+                    (site.getType().equals(type)) ||
+                    (client != null && site.getClient().equals(client)) ||
+                    (startDate != null && site.getStartDate().equals(startDate)) ||
+                    (endDate != null && site.getEndDate().equals(endDate))) {
+                if (!searchSites.contains(site)) {
+                    searchSites.add(site);
+                }
+            }
+        }
+
+        tableSites.getItems().setAll(searchSites);
+
+        nameSearch.clear();
+        typeSearch.clear();
+        clientSearch.clear();
+        startDateSearch.setValue(null);
+        endDateSearch.setValue(null);
     }
 }
