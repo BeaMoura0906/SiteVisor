@@ -3,11 +3,17 @@ package Controller;
 import Model.Entity.Site;
 import Model.Manager.SiteManager;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -47,12 +53,16 @@ public class Controller {
 
     private List<Site> sites;
 
+    SiteManager siteManager = new SiteManager();
+
     @FXML
     private void onChangeTabSites() {
-        SiteManager siteManager = new SiteManager();
-        this.sites = siteManager.getAllSites();
+
+        this.sites = this.siteManager.getAllSites();
 
         setUpTableView();
+
+        tableSites.getItems().clear();
         tableSites.getItems().addAll(sites);
 
         setRowDoubleClickListener();
@@ -97,7 +107,20 @@ public class Controller {
             row.setOnMouseClicked(event -> {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                     Site selectedSite = row.getItem();
-                    handleRowDoubleClick(selectedSite);
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/site-view.fxml"));
+                    Parent root = null;
+                    try {
+                        root = loader.load();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    SiteController siteController = loader.getController();
+                    siteController.initialize(selectedSite);
+                    Stage siteStage = new Stage();
+                    siteStage.setTitle("SiteVisor | Chantier : " + selectedSite.getName());
+                    siteStage.initModality(Modality.APPLICATION_MODAL);
+                    siteStage.setScene(new Scene(root));
+                    siteStage.show();
                 }
             });
             return row;
@@ -133,9 +156,9 @@ public class Controller {
         for (Site site : this.sites) {
             if ((site.getName().equals(name)) ||
                     (site.getType().equals(type)) ||
-                    (client != null && site.getClient().equals(client)) ||
-                    (startDate != null && site.getStartDate().equals(startDate)) ||
-                    (endDate != null && site.getEndDate().equals(endDate))) {
+                    (site.getClient().equals(client)) ||
+                    (site.getStartDate().equals(startDate)) ||
+                    (site.getEndDate().equals(endDate))) {
                 if (!searchSites.contains(site)) {
                     searchSites.add(site);
                 }

@@ -47,4 +47,34 @@ public class SiteManager {
 
         return sites;
     }
+
+    public Site getSiteById(int id){
+        Site site = null;
+        String query = "SELECT * FROM sites WHERE id=?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                String name = resultSet.getString("name");
+                String type = resultSet.getString("type");
+                String client = resultSet.getString("client");
+                String address = resultSet.getString("address");
+                String startDate = resultSet.getString("start_date");
+                String endDate = resultSet.getString("end_date");
+                int userId = resultSet.getInt("user_id");
+
+                site = new Site(id, name, type, client, address, startDate, endDate, userId);
+
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return site;
+    }
 }

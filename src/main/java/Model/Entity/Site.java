@@ -10,7 +10,17 @@ public class Site {
     private String endDate;
     private int userId;
 
-    // Constructor
+    /**
+     * Constructor for Site
+     * @param id
+     * @param name
+     * @param type
+     * @param client
+     * @param address
+     * @param startDate
+     * @param endDate
+     * @param userId
+     */
     public Site(int id, String name, String type, String client, String address, String startDate, String endDate, int userId) {
         this.id = id;
         this.name = name;
