@@ -3,27 +3,27 @@ package Model.Entity;
 public class Category {
     private int id;
     private String name;
-    private int siteId;
+    private Site site;
 
     /**
      * Constructor for Category
      * @param id
      * @param name
-     * @param siteId
+     * @param site
      */
-    public Category(int id, String name, int siteId) {
+    public Category(int id, String name, Site site) {
         this.id = id;
         this.name = name;
-        this.siteId = siteId;
+        this.site = site;
     }
 
     // Getters
     public int getId() { return id; }
     public String getName() { return name; }
-    public int getSiteId() { return siteId; }
+    public Site getSite() { return site; }
 
     // Setters
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
-    public void setSiteId(int siteId) { this.siteId = siteId; }
+    public void setSite(Site site) { this.site = site; }
 }

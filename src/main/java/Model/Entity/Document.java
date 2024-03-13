@@ -5,7 +5,7 @@ public class Document {
     private String name;
     private String type;
     private String path;
-    private int siteId;
+    private Site site;
 
     /**
      * Constructor for Document
@@ -13,14 +13,14 @@ public class Document {
      * @param name
      * @param type
      * @param path
-     * @param siteId
+     * @param site
      */
-    public Document(int id, String name, String type, String path, int siteId) {
+    public Document(int id, String name, String type, String path, Site site) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.path = path;
-        this.siteId = siteId;
+        this.site = site;
     }
 
     // Getters
@@ -28,12 +28,12 @@ public class Document {
     public String getName() { return name; }
     public String getType() { return type; }
     public String getPath() { return path; }
-    public int getSiteId() { return siteId; }
+    public Site getSite() { return site; }
 
     // Setters
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setType(String type) { this.type = type; }
     public void setPath(String path) { this.path = path; }
-    public void setSiteId(int siteId) { this.siteId = siteId; }
+    public void setSite(Site site) { this.site = site; }
 }

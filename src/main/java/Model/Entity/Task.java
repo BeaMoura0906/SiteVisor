@@ -4,31 +4,31 @@ public class Task {
     private int id;
     private String name;
     private String description;
-    private int subcategoryId;
+    private Subcategory subcategory;
 
     /**
      * Constructor for Task
      * @param id
      * @param name
      * @param description
-     * @param subcategoryId
+     * @param subcategory
      */
-    public Task(int id, String name, String description, int subcategoryId) {
+    public Task(int id, String name, String description, Subcategory subcategory) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.subcategoryId = subcategoryId;
+        this.subcategory = subcategory;
     }
 
     // Getters
     public int getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
-    public int getSubcategoryId() { return subcategoryId; }
+    public Subcategory getSubcategory() { return subcategory; }
 
     // Setters
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }
-    public void setSubcategoryId(int subcategoryId) { this.subcategoryId = subcategoryId; }
+    public void setSubcategory(Subcategory subcategory) { this.subcategory = subcategory; }
 }
