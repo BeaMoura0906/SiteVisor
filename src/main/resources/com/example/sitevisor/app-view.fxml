@@ -19,7 +19,7 @@
    <children>
       <TabPane prefHeight="585.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
-          <Tab onSelectionChanged="#onChangeTabSites" text="Chantiers">
+          <Tab onSelectionChanged="#onChangeSitesTab" style="-fx-font-weight: bold;" text="Chantiers">
             <content>
               <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0" prefHeight="614.0" prefWidth="1200.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                      <children>
@@ -113,7 +113,7 @@
                   </VBox>
             </content>
           </Tab>
-          <Tab text="Planning">
+          <Tab onSelectionChanged="#onChangePlanningTab" text="Planning">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
             </content>

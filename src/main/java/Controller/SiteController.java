@@ -9,20 +9,21 @@ import Model.Manager.SiteManager;
 import Model.Manager.SubcategoryManager;
 import Model.Manager.TaskManager;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.geometry.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SiteController {
-
+    private Site site;
     @FXML
     private Label idSiteLabel;
     @FXML
@@ -40,20 +41,50 @@ public class SiteController {
     @FXML
     private ProgressBar progressBar;
     @FXML
-    private ScrollPane tasksPane;
+    private HBox tasksHBox;
+    @FXML
+    private Tab editTab;
 
     SiteManager siteManager = new SiteManager();
     CategoryManager categoryManager = new CategoryManager();
     SubcategoryManager subcategoryManager = new SubcategoryManager();
     TaskManager taskManager = new TaskManager();
 
-    @FXML
-    public void initialize(Site site) {
-        Site updatedSite = this.siteManager.getSiteById(site.getId());
+    public SiteController(Site site) {
+        this.site = site;
+    }
 
-        setSiteLabels(updatedSite);
-        updateProgressBar(updatedSite);
-        showTasksPane(updatedSite);
+    @FXML
+    public void initialize() {
+        onChangeSiteTab();
+    }
+    @FXML
+    private void onChangeSiteTab() {
+        this.site = this.siteManager.getSiteById(this.site.getId());
+
+        setSiteLabels(this.site);
+        updateProgressBar(this.site);
+        this.tasksHBox.getChildren().clear();
+        showTasksPane(this.site);
+    }
+
+    @FXML
+    private void onChangeEditTab() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/edit-view.fxml"));
+        EditController editController = new EditController(this.site);
+        loader.setController(editController);
+        try {
+            this.editTab.setContent(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        editController.initialize();
+
+    }
+
+    @FXML
+    private void onChangeDocTab() {
+
     }
 
     private void setSiteLabels(Site site) {
@@ -79,30 +110,6 @@ public class SiteController {
     }
 
     private void showTasksPane(Site site) {
-        // Create tasks pane
-        VBox tasksPaneVBox = new VBox();
-        tasksPaneVBox.setPadding(new Insets(10, 10, 10, 10));
-        tasksPaneVBox.alignmentProperty().setValue(Pos.TOP_CENTER);
-        tasksPaneVBox.prefWidthProperty().bind(tasksPane.widthProperty());
-
-        // Create title for tasks pane
-        Label tasksPaneTitle = new Label("Liste des tâches");
-        tasksPaneTitle.setStyle("-fx-font-size: 18px;");
-        tasksPaneTitle.setPadding(new Insets(10, 10, 10, 10));
-        tasksPaneTitle.alignmentProperty().setValue(Pos.TOP_CENTER);
-        tasksPaneTitle.prefWidthProperty().bind(tasksPane.widthProperty());
-        tasksPaneVBox.getChildren().add(tasksPaneTitle);
-
-        // Create tasks container for tasks pane
-        HBox tasksHBox = new HBox();
-        tasksHBox.setPadding(new Insets(10, 10, 10, 10));
-        tasksHBox.alignmentProperty().setValue(Pos.TOP_CENTER);
-        tasksHBox.prefWidthProperty().bind(tasksPane.widthProperty());
-        tasksPaneVBox.getChildren().add(tasksHBox);
-
-        // Add tasks pane to scroll pane
-        this.tasksPane.setContent(tasksPaneVBox);
-
         // Add categories to tasks pane
         List<Category> categoriesList = categoryManager.getAllCategoriesBySite(site);
 
@@ -111,7 +118,7 @@ public class SiteController {
             VBox categoryVBox = new VBox();
             categoryVBox.setSpacing(10);
             categoryVBox.alignmentProperty().setValue(Pos.TOP_CENTER);
-            if( tasksHBox.getChildren().size() == 0) {
+            if (this.tasksHBox.getChildren().size() == 0) {
                 categoryVBox.styleProperty().setValue("-fx-border-color: black; -fx-border-width: 0px 1px; -fx-border-style: solid;");
             } else {
                 categoryVBox.styleProperty().setValue("-fx-border-color: black; -fx-border-width: 0px 1px 0px 0px; -fx-border-style: solid;");
@@ -124,7 +131,7 @@ public class SiteController {
             // Create subcategories container for each category container
             HBox subcategoriesHBox = new HBox();
             categoryVBox.getChildren().add(subcategoriesHBox);
-            tasksHBox.getChildren().add(categoryVBox);
+            this.tasksHBox.getChildren().add(categoryVBox);
 
             // Add subcategories to subcategories container
             List<Subcategory> subcategoriesList = subcategoryManager.getAllSubcategoriesByCategory(category);
@@ -134,7 +141,7 @@ public class SiteController {
                 VBox subcategoryVBox = new VBox();
                 subcategoryVBox.setSpacing(10);
                 subcategoryVBox.alignmentProperty().setValue(Pos.TOP_CENTER);
-                if( subcategoriesHBox.getChildren().size() != 0) {
+                if (subcategoriesHBox.getChildren().size() != 0) {
                     subcategoryVBox.styleProperty().setValue("-fx-border-color: black; -fx-border-width: 0px 0px 0px 1px; -fx-border-style: solid;");
                 }
                 // Create subcategory label for each subcategory container
@@ -165,5 +172,4 @@ public class SiteController {
         }
 
     }
-
 }

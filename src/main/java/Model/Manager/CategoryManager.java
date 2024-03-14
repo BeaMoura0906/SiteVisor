@@ -40,4 +40,25 @@ public class CategoryManager {
 
         return categories;
     }
+
+    public Category getCategoryById(int id) {
+        Category category = null;
+        String query = "SELECT * FROM categories WHERE id = ?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if (resultSet.next()) {
+                int categoryId = resultSet.getInt("id");
+                String categoryName = resultSet.getString("name");
+                category = new Category(categoryId, categoryName, null);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return category;
+    }
 }

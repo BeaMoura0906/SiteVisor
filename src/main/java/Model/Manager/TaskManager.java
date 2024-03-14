@@ -78,4 +78,37 @@ public class TaskManager {
 
         return tasks;
     }
+
+    public Task getTaskById(int id) {
+        Task task = null;
+        String query = "SELECT t.id, t.name, t.description, s.id, s.name, c.id, c.name FROM tasks t INNER JOIN subcategories s ON t.subcategory_id = s.id INNER JOIN categories c ON s.category_id = c.id WHERE t.id = ? ";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            if( resultSet.next() ) {
+                int taskId = resultSet.getInt("t.id");
+                String taskName = resultSet.getString("t.name");
+                String taskDescription = resultSet.getString("t.description");
+                int subcategoryId = resultSet.getInt("s.id");
+                String subcategoryName = resultSet.getString("s.name");
+                int categoryId = resultSet.getInt("c.id");
+                String categoryName = resultSet.getString("c.name");
+
+                Category category = new Category(categoryId, categoryName, null);
+
+                Subcategory subcategory = new Subcategory(subcategoryId, subcategoryName, category);
+
+                task = new Task(taskId, taskName, taskDescription, subcategory);
+            }
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return task;
+    }
 }

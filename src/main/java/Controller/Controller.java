@@ -56,7 +56,7 @@ public class Controller {
     SiteManager siteManager = new SiteManager();
 
     @FXML
-    private void onChangeTabSites() {
+    private void onChangeSitesTab() {
 
         this.sites = this.siteManager.getAllSites();
 
@@ -66,6 +66,11 @@ public class Controller {
         tableSites.getItems().addAll(sites);
 
         setRowDoubleClickListener();
+    }
+
+    @FXML
+    private void onChangePlanningTab() {
+
     }
 
     private void setUpTableView() {
@@ -108,29 +113,27 @@ public class Controller {
                 if (!row.isEmpty() && event.getButton() == MouseButton.PRIMARY && event.getClickCount() == 2) {
                     Site selectedSite = row.getItem();
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/site-view.fxml"));
+                    SiteController siteController = new SiteController(selectedSite);
+                    loader.setController(siteController);
                     Parent root = null;
                     try {
                         root = loader.load();
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }
-                    SiteController siteController = loader.getController();
-                    siteController.initialize(selectedSite);
+
+                    siteController.initialize();
+
                     Stage siteStage = new Stage();
                     siteStage.setTitle("SiteVisor | Chantier : " + selectedSite.getName());
                     siteStage.initModality(Modality.APPLICATION_MODAL);
                     siteStage.setScene(new Scene(root));
                     siteStage.show();
+
                 }
             });
             return row;
         });
-    }
-
-    private void handleRowDoubleClick(Site selectedSite) {
-        // Implement your action here when a row is double-clicked
-        System.out.println("Site double-clicked: " + selectedSite.getName());
-        // Example: Open a new window to display the site details
     }
 
     @FXML
@@ -173,4 +176,6 @@ public class Controller {
         startDateSearch.setValue(null);
         endDateSearch.setValue(null);
     }
+
+
 }
