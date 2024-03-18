@@ -15,9 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EditController {
 
@@ -67,25 +65,34 @@ public class EditController {
     private Button taskModifyBtn;
     @FXML
     private Button taskDeleteBtn;
-    @FXML
-    private Map<String, Integer> categoryIdMap = new HashMap<>();
-    @FXML
-    private Map<String, Integer> subcategoryIdMap = new HashMap<>();
-    @FXML
-    private Map<String, Integer> taskIdMap = new HashMap<>();
 
     public EditController(Site site) {
         this.site = site;
     }
 
+    // Ajouter le blocage des mises à jour s'il manque des champs avec pop up warning
+    // Ajouter pop up succes en cas de réussite
+
     @FXML
     public void initialize() {
-        setUpEntitiesChoiceBoxes();
+        setUpCategoryChoiceBox();
+        setUpSubcategoryChoiceBox();
+        setUpTaskChoiceBox();
     }
 
     @FXML
     private void onClickCategoryAddBtn() {
+        String name = this.categoryNameTextField.getText();
 
+        Category category = new Category(0 ,name, this.site);
+        boolean isInserted = this.categoryManager.insertCategory(category);
+
+        if (isInserted) {
+            initialize();
+            System.out.println("Category created successfully");
+        } else {
+            System.out.println("Failed to create category");
+        }
     }
 
     @FXML
@@ -93,73 +100,164 @@ public class EditController {
         int id = this.categoryId;
         String name = this.categoryNameTextField.getText();
 
-        System.out.println("Id : " + id + " Name : " + name);
+        Category category = new Category(id, name, this.site);
+        boolean isUpdated = this.categoryManager.updateCategory(category);
+
+        if (isUpdated) {
+            initialize();
+            System.out.println("Category updated successfully");
+        } else {
+            System.out.println("Failed to update category");
+        }
     }
 
     @FXML
     private void onClickCategoryDeleteBtn() {
+        int id = this.categoryId;
 
+        boolean isDeleted = this.categoryManager.deleteCategory(id);
+
+        if (isDeleted) {
+            initialize();
+            System.out.println("Category deleted successfully");
+        } else {
+            System.out.println("Failed to delete category");
+        }
     }
 
     @FXML
     private void onClickSubcategoryAddBtn() {
+        String name = this.subcategoryNameTextField.getText();
 
+        String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String[] split = associatedCategoryChoiceBoxValue.split(" - ");
+        int associatedCategoryId = Integer.parseInt(split[0]);
+
+        Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
+
+        Subcategory subcategory = new Subcategory(0, name, associatedCategory);
+
+        boolean isInserted = this.subcategoryManager.insertSubcategory(subcategory);
+
+        if (isInserted) {
+            initialize();
+            System.out.println("Subcategory created successfully");
+        } else {
+            System.out.println("Failed to create subcategory");
+        }
     }
 
     @FXML
     private void onClickSubcategoryModifyBtn() {
+        int id = this.subcategoryId;
+        String name = this.subcategoryNameTextField.getText();
 
+        String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String[] split = associatedCategoryChoiceBoxValue.split(" - ");
+        int associatedCategoryId = Integer.parseInt(split[0]);
+
+        Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
+
+        Subcategory subcategory = new Subcategory(id, name, associatedCategory);
+
+        boolean isUpdated = this.subcategoryManager.updateSubcategory(subcategory);
+
+        if (isUpdated) {
+            initialize();
+            System.out.println("Subcategory updated successfully");
+        } else {
+            System.out.println("Failed to update subcategory");
+        }
     }
 
     @FXML
     private void onClickSubcategoryDeleteBtn() {
+        int id = this.subcategoryId;
 
+        boolean isDeleted = this.subcategoryManager.deleteSubcategory(id);
+
+        if (isDeleted) {
+            initialize();
+            System.out.println("Subcategory deleted successfully");
+        } else {
+            System.out.println("Failed to delete subcategory");
+        }
     }
 
     @FXML
     private void onClickTaskAddBtn() {
+        String name = this.taskNameTextField.getText();
+        String description = this.taskDescriptionTextField.getText();
 
+        String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
+        int subcategoryId = Integer.parseInt(split[0]);
+
+        Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
+
+        Task task = new Task(0, name, description, associatedSubcategory);
+
+        boolean isInserted = this.taskManager.insertTask(task);
+
+        if (isInserted) {
+            initialize();
+            System.out.println("Task created successfully");
+        } else {
+            System.out.println("Failed to create task");
+        }
     }
 
     @FXML
     private void onClickTaskModifyBtn() {
+        int id = this.taskId;
+        String name = this.taskNameTextField.getText();
+        String description = this.taskDescriptionTextField.getText();
 
+        String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+        String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
+        int subcategoryId = Integer.parseInt(split[0]);
+
+        Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
+
+        Task task = new Task(id, name, description, associatedSubcategory);
+
+        boolean isUpdated = this.taskManager.updateTask(task);
+
+        if (isUpdated) {
+            initialize();
+            System.out.println("Task updated successfully");
+        } else {
+            System.out.println("Failed to update task");
+        }
     }
 
     @FXML
     private void onClickTaskDeleteBtn() {
+        int id = this.taskId;
 
+        boolean isDeleted = this.taskManager.deleteTask(id);
+
+        if (isDeleted) {
+            initialize();
+            System.out.println("Task deleted successfully");
+        } else {
+            System.out.println("Failed to delete task");
+        }
     }
 
-    private void setUpEntitiesChoiceBoxes() {
+    private void setUpCategoryChoiceBox() {
         List<Category> categoriesBySite = this.categoryManager.getAllCategoriesBySite(this.site);
-        List<Subcategory> subcategoriesBySite = this.subcategoryManager.getAllSubcategoriesBySite(this.site);
-        List<Task> tasksBySite = this.taskManager.getAllTasksBySite(this.site);
-
         ObservableList<String> categoryItems = FXCollections.observableArrayList();
-        ObservableList<String> subcategoryItems = FXCollections.observableArrayList();
-        ObservableList<String> taskItems = FXCollections.observableArrayList();
 
         for (Category category : categoriesBySite) {
             categoryItems.add(category.getId() + " - " + category.getName());
         }
-        for (Subcategory subcategory : subcategoriesBySite) {
-            subcategoryItems.add(subcategory.getId() + " - " + subcategory.getName() + " | Catégorie : " + subcategory.getCategory().getName());
-        }
-        for (Task task : tasksBySite) {
-            taskItems.add(task.getId() + " - " + task.getName() + " | Sous-catégorie : " + task.getSubcategory().getName() + " | Categorie : " + task.getSubcategory().getCategory().getName());
-        }
 
         associatedCategoryChoiceBox.setItems(categoryItems);
-        associatedSubcategoryChoiceBox.setItems(subcategoryItems);
 
         categoryItems.add(0, "");
-        subcategoryItems.add(0, "");
-        taskItems.add(0, "");
 
         categoryChoiceBox.setItems(categoryItems);
-        subcategoryChoiceBox.setItems(subcategoryItems);
-        taskChoiceBox.setItems(taskItems);
 
         categoryChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.equals("")) {
@@ -178,6 +276,21 @@ public class EditController {
                 this.categoryNameTextField.setText(selectedCategory.getName());
             }
         });
+    }
+
+    private void setUpSubcategoryChoiceBox() {
+        List<Subcategory> subcategoriesBySite = this.subcategoryManager.getAllSubcategoriesBySite(this.site);
+        ObservableList<String> subcategoryItems = FXCollections.observableArrayList();
+
+        for (Subcategory subcategory : subcategoriesBySite) {
+            subcategoryItems.add(subcategory.getId() + " - " + subcategory.getName() + " | Catégorie : " + subcategory.getCategory().getName());
+        }
+
+        associatedSubcategoryChoiceBox.setItems(subcategoryItems);
+
+        subcategoryItems.add(0, "");
+
+        subcategoryChoiceBox.setItems(subcategoryItems);
 
         subcategoryChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.equals("")) {
@@ -186,6 +299,7 @@ public class EditController {
                 this.subcategoryModifyBtn.setDisable(true);
                 this.subcategoryDeleteBtn.setDisable(true);
                 this.subcategoryNameTextField.clear();
+                this.associatedCategoryChoiceBox.setValue("");
             } else {
                 String[] split = newValue.toString().split(" - ");
                 this.subcategoryId = Integer.parseInt(split[0]);
@@ -197,6 +311,19 @@ public class EditController {
                 this.associatedCategoryChoiceBox.setValue(selectedSubcategory.getCategory().getId() + " - " + selectedSubcategory.getCategory().getName());
             }
         });
+    }
+
+    private void setUpTaskChoiceBox() {
+        List<Task> tasksBySite = this.taskManager.getAllTasksBySite(this.site);
+        ObservableList<String> taskItems = FXCollections.observableArrayList();
+
+        for (Task task : tasksBySite) {
+            taskItems.add(task.getId() + " - " + task.getName() + " | Sous-catégorie : " + task.getSubcategory().getName() + " | Categorie : " + task.getSubcategory().getCategory().getName());
+        }
+
+        taskItems.add(0, "");
+
+        taskChoiceBox.setItems(taskItems);
 
         taskChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue == null || newValue.equals("")) {
@@ -206,6 +333,7 @@ public class EditController {
                 this.taskDeleteBtn.setDisable(true);
                 this.taskNameTextField.clear();
                 this.taskDescriptionTextField.clear();
+                this.associatedSubcategoryChoiceBox.setValue("");
             } else {
                 String[] split = newValue.toString().split(" - ");
                 this.taskId = Integer.parseInt(split[0]);
@@ -218,7 +346,5 @@ public class EditController {
                 this.associatedSubcategoryChoiceBox.setValue(selectedTask.getSubcategory().getId() + " - " + selectedTask.getSubcategory().getName() + " | Categorie : " + selectedTask.getSubcategory().getCategory().getName());
             }
         });
-
     }
-
 }
