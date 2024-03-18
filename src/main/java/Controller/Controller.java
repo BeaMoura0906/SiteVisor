@@ -2,6 +2,9 @@ package Controller;
 
 import Model.Entity.Site;
 import Model.Manager.SiteManager;
+import javafx.beans.Observable;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -21,39 +24,51 @@ import java.util.List;
 
 public class Controller {
 
-    @FXML
-    private VBox vBoxTableSites;
-
-    @FXML
-    private TableView<Site> tableSites;
-
-    @FXML
-    private TableColumn<Site, Integer> idCol;
-
-    @FXML
-    private TableColumn<Site, String> nameCol, typeCol, clientCol, addressCol, startDateCol, endDateCol;
-
-    @FXML
-    private TextField nameSearch;
-
-    @FXML
-    private TextField typeSearch;
-
-    @FXML
-    private TextField clientSearch;
-
-    @FXML
-    private DatePicker startDateSearch;
-
-    @FXML
-    private DatePicker endDateSearch;
-
-    @FXML
-    private Button searchButton;
-
     private List<Site> sites;
+    private int siteId;
 
     SiteManager siteManager = new SiteManager();
+
+    @FXML
+    private VBox vBoxTableSites;
+    @FXML
+    private TableView<Site> tableSites;
+    @FXML
+    private TableColumn<Site, Integer> idCol;
+    @FXML
+    private TableColumn<Site, String> nameCol, typeCol, clientCol, addressCol, startDateCol, endDateCol;
+    @FXML
+    private TextField nameSearch;
+    @FXML
+    private TextField typeSearch;
+    @FXML
+    private TextField clientSearch;
+    @FXML
+    private DatePicker startDateSearch;
+    @FXML
+    private DatePicker endDateSearch;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private ChoiceBox<String> siteChoiceBox;
+    @FXML
+    private TextField siteNameTextField;
+    @FXML
+    private TextField siteTypeTextField;
+    @FXML
+    private TextField siteClientTextField;
+    @FXML
+    private TextField siteAddressTextField;
+    @FXML
+    private DatePicker siteStartDatePicker;
+    @FXML
+    private DatePicker siteEndDatePicker;
+    @FXML
+    private Button siteAddBtn;
+    @FXML
+    private Button siteModifyBtn;
+    @FXML
+    private Button siteDeleteBtn;
 
     @FXML
     private void onChangeSitesTab() {
@@ -69,8 +84,114 @@ public class Controller {
     }
 
     @FXML
-    private void onChangePlanningTab() {
+    private void onClickSearchButton() {
+        String name = nameSearch.getText();
+        String type = typeSearch.getText();
+        String client = clientSearch.getText();
+        LocalDate startLocalDate = startDateSearch.getValue();
+        LocalDate endLocalDate = endDateSearch.getValue();
+        String startDate = null;
+        String endDate = null;
 
+        if ( startLocalDate != null ) {
+            startDate = startLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        if ( endLocalDate != null ) {
+            endDate = endLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        }
+
+        List<Site> searchSites = new ArrayList<Site>();
+
+        for (Site site : this.sites) {
+            if ((site.getName().equals(name)) ||
+                    (site.getType().equals(type)) ||
+                    (site.getClient().equals(client)) ||
+                    (site.getStartDate().equals(startDate)) ||
+                    (site.getEndDate().equals(endDate))) {
+                if (!searchSites.contains(site)) {
+                    searchSites.add(site);
+                }
+            }
+        }
+
+        tableSites.getItems().setAll(searchSites);
+
+        nameSearch.clear();
+        typeSearch.clear();
+        clientSearch.clear();
+        startDateSearch.setValue(null);
+        endDateSearch.setValue(null);
+    }
+
+    @FXML
+    private void onChangeEditSiteTab() {
+        setUpSiteChoiceBox();
+    }
+
+    @FXML
+    private void onClickSiteAddBtn() {
+        String name = siteNameTextField.getText();
+        String type = siteTypeTextField.getText();
+        String client = siteClientTextField.getText();
+        String address = siteAddressTextField.getText();
+        LocalDate startDate = siteStartDatePicker.getValue();
+        String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = siteEndDatePicker.getValue();
+        String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        // To change with authentication
+        int userId = 1;
+
+        Site site = new Site(0, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+        boolean isInserted = this.siteManager.insertSite(site);
+
+        // Ajouter pop up pour champs non remplis
+        // Ajouter pop up pour success
+
+        if (isInserted) {
+            onChangeEditSiteTab();
+            System.out.println("Site inserted successfully");
+        } else {
+            System.out.println("Could not insert site");
+        }
+    }
+
+    @FXML
+    private void onClickSiteModifyBtn() {
+        String name = siteNameTextField.getText();
+        String type = siteTypeTextField.getText();
+        String client = siteClientTextField.getText();
+        String address = siteAddressTextField.getText();
+        LocalDate startDate = siteStartDatePicker.getValue();
+        String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = siteEndDatePicker.getValue();
+        String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+        // To change with authentication
+        int userId = 1;
+
+        Site site = new Site(siteId, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+        boolean isUpdated = this.siteManager.updateSite(site);
+
+        if (isUpdated) {
+            onChangeEditSiteTab();
+            System.out.println("Site updated successfully");
+        } else {
+            System.out.println("Could not update site");
+        }
+    }
+
+    @FXML
+    private void onClickSiteDeleteBtn() {
+        boolean isDeleted = this.siteManager.deleteSite(siteId);
+
+        if (isDeleted) {
+            onChangeEditSiteTab();
+            System.out.println("Site deleted successfully");
+        } else {
+            System.out.println("Could not delete site");
+        }
     }
 
     private void setUpTableView() {
@@ -136,46 +257,45 @@ public class Controller {
         });
     }
 
-    @FXML
-    private void onClickSearchButton() {
-        String name = nameSearch.getText();
-        String type = typeSearch.getText();
-        String client = clientSearch.getText();
-        LocalDate startLocalDate = startDateSearch.getValue();
-        LocalDate endLocalDate = endDateSearch.getValue();
-        String startDate = null;
-        String endDate = null;
+    private void setUpSiteChoiceBox() {
+        this.sites = this.siteManager.getAllSites();
 
-        if ( startLocalDate != null ) {
-            startDate = startLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        if ( endLocalDate != null ) {
-            endDate = endLocalDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        }
-
-        List<Site> searchSites = new ArrayList<Site>();
+        ObservableList<String> siteItems = FXCollections.observableArrayList();
 
         for (Site site : this.sites) {
-            if ((site.getName().equals(name)) ||
-                    (site.getType().equals(type)) ||
-                    (site.getClient().equals(client)) ||
-                    (site.getStartDate().equals(startDate)) ||
-                    (site.getEndDate().equals(endDate))) {
-                if (!searchSites.contains(site)) {
-                    searchSites.add(site);
-                }
-            }
+            siteItems.add(site.getId() + " - " + site.getName() + " | " + site.getAddress());
         }
 
-        tableSites.getItems().setAll(searchSites);
+        siteItems.add(0, "");
 
-        nameSearch.clear();
-        typeSearch.clear();
-        clientSearch.clear();
-        startDateSearch.setValue(null);
-        endDateSearch.setValue(null);
+        siteChoiceBox.setItems(siteItems);
+
+        siteChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == null || newValue.equals("")) {
+                siteChoiceBox.getSelectionModel().clearSelection();
+                this.siteAddBtn.setDisable(false);
+                this.siteModifyBtn.setDisable(true);
+                this.siteDeleteBtn.setDisable(true);
+                this.siteNameTextField.clear();
+                this.siteTypeTextField.clear();
+                this.siteClientTextField.clear();
+                this.siteAddressTextField.clear();
+                this.siteStartDatePicker.setValue(null);
+                this.siteEndDatePicker.setValue(null);
+            } else {
+                String[] split = newValue.toString().split(" - ");
+                this.siteId = Integer.parseInt(split[0]);
+                this.siteAddBtn.setDisable(true);
+                this.siteModifyBtn.setDisable(false);
+                this.siteDeleteBtn.setDisable(false);
+                Site selectedSite = this.siteManager.getSiteById(this.siteId);
+                this.siteNameTextField.setText(selectedSite.getName());
+                this.siteTypeTextField.setText(selectedSite.getType());
+                this.siteClientTextField.setText(selectedSite.getClient());
+                this.siteAddressTextField.setText(selectedSite.getAddress());
+                this.siteStartDatePicker.setValue(LocalDate.parse(selectedSite.getStartDate()));
+                this.siteEndDatePicker.setValue(LocalDate.parse(selectedSite.getEndDate()));
+            }
+        });
     }
-
-
 }

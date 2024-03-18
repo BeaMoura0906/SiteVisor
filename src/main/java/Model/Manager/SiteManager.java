@@ -48,6 +48,12 @@ public class SiteManager {
         return sites;
     }
 
+    /**
+     * Retrieve a site from the database based on its ID.
+     *
+     * @param id The ID of the site to retrieve.
+     * @return The Site object representing the site with the given ID.
+     */
     public Site getSiteById(int id){
         Site site = null;
         String query = "SELECT * FROM sites WHERE id=?";
@@ -76,5 +82,90 @@ public class SiteManager {
         }
 
         return site;
+    }
+
+    /**
+     * Insert a new site into the database.
+     *
+     * @param site The site to insert.
+     * @return a boolean indicating whether the insert was successful.
+     */
+    public boolean insertSite(Site site){
+        boolean isInserted = false;
+        String query = "INSERT INTO sites (name, type, client, address, start_date, end_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, site.getName());
+            statement.setString(2, site.getType());
+            statement.setString(3, site.getClient());
+            statement.setString(4, site.getAddress());
+            statement.setString(5, site.getStartDate());
+            statement.setString(6, site.getEndDate());
+            statement.setInt(7, site.getUserId());
+
+            if (statement.executeUpdate() > 0) {
+                isInserted = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return isInserted;
+    }
+
+    /**
+     * Update an existing site in the database.
+     *
+     * @param site The site to update.
+     * @return a boolean indicating whether the update was successful.
+     */
+    public boolean updateSite(Site site){
+        boolean isUpdated = false;
+        String query = "UPDATE sites SET name=?, type=?, client=?, address=?, start_date=?, end_date=?, user_id=? WHERE id=?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, site.getName());
+            statement.setString(2, site.getType());
+            statement.setString(3, site.getClient());
+            statement.setString(4, site.getAddress());
+            statement.setString(5, site.getStartDate());
+            statement.setString(6, site.getEndDate());
+            statement.setInt(7, site.getUserId());
+            statement.setInt(8, site.getId());
+
+            if (statement.executeUpdate() > 0) {
+                isUpdated = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return isUpdated;
+    }
+
+    /**
+     * Delete a site from the database.
+     *
+     * @param siteId The ID of the site to delete.
+     * @return a boolean indicating whether the site was deleted successful.
+     */
+    public boolean deleteSite(int siteId){
+        boolean isDeleted = false;
+        String query = "DELETE FROM sites WHERE id=?";
+
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, siteId);
+
+            if (statement.executeUpdate() > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return isDeleted;
     }
 }

@@ -116,7 +116,7 @@
                   </VBox>
             </content>
           </Tab>
-            <Tab onSelectionChanged="#onChangePlanningTab" text="Édition de chantier">
+            <Tab onSelectionChanged="#onChangeEditSiteTab" text="Édition de chantier">
                <content>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
@@ -160,18 +160,18 @@
                               <TextField fx:id="siteTypeTextField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <TextField fx:id="siteClientTextField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                               <TextField fx:id="siteAddressTextField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                              <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                              <DatePicker fx:id="startDatePicker" prefHeight="25.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                              <Button fx:id="siteAddBtn" mnemonicParsing="false" text="Ajouter" GridPane.rowIndex="8" />
+                              <DatePicker fx:id="siteStartDatePicker" prefHeight="25.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                              <DatePicker fx:id="siteEndDatePicker" prefHeight="25.0" prefWidth="215.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                              <Button fx:id="siteAddBtn" mnemonicParsing="false" onAction="#onClickSiteAddBtn" text="Ajouter" GridPane.rowIndex="8" />
                               <HBox prefHeight="100.0" prefWidth="200.0" GridPane.rowIndex="1" />
                               <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="8">
                                  <children>
-                                    <Button fx:id="siteModifyBtn" disable="true" mnemonicParsing="false" text="Modifier">
+                                    <Button fx:id="siteModifyBtn" disable="true" mnemonicParsing="false" onAction="#onClickSiteModifyBtn" text="Modifier">
                                        <HBox.margin>
                                           <Insets bottom="1.0" left="2.0" right="2.0" top="1.0" />
                                        </HBox.margin>
                                     </Button>
-                                    <Button fx:id="siteDeleteBtn" disable="true" mnemonicParsing="false" text="Supprimer">
+                                    <Button fx:id="siteDeleteBtn" disable="true" mnemonicParsing="false" onAction="#onClickSiteDeleteBtn" text="Supprimer">
                                        <HBox.margin>
                                           <Insets bottom="1.0" left="2.0" right="2.0" top="1.0" />
                                        </HBox.margin>
