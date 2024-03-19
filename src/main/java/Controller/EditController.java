@@ -14,6 +14,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import util.LoadPopUp;
 
 import java.util.List;
 
@@ -70,9 +71,6 @@ public class EditController {
         this.site = site;
     }
 
-    // Ajouter le blocage des mises à jour s'il manque des champs avec pop up warning
-    // Ajouter pop up succes en cas de réussite
-
     @FXML
     public void initialize() {
         setUpCategoryChoiceBox();
@@ -82,166 +80,304 @@ public class EditController {
 
     @FXML
     private void onClickCategoryAddBtn() {
-        String name = this.categoryNameTextField.getText();
-
-        Category category = new Category(0 ,name, this.site);
-        boolean isInserted = this.categoryManager.insertCategory(category);
-
-        if (isInserted) {
-            initialize();
-            System.out.println("Category created successfully");
+        if(this.categoryNameTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to create category");
+            String name = this.categoryNameTextField.getText();
+
+            Category category = new Category(0 ,name, this.site);
+            boolean isInserted = this.categoryManager.insertCategory(category);
+
+            if (isInserted) {
+                initialize();
+                boolean success = true;
+                String message = "Catégorie ajoutée avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible d'ajouter la catégorie ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickCategoryModifyBtn() {
-        int id = this.categoryId;
-        String name = this.categoryNameTextField.getText();
-
-        Category category = new Category(id, name, this.site);
-        boolean isUpdated = this.categoryManager.updateCategory(category);
-
-        if (isUpdated) {
-            initialize();
-            System.out.println("Category updated successfully");
+        if( this.categoryId == null ||  this.categoryNameTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to update category");
+            int id = this.categoryId;
+            String name = this.categoryNameTextField.getText();
+
+            Category category = new Category(id, name, this.site);
+            boolean isUpdated = this.categoryManager.updateCategory(category);
+
+            if (isUpdated) {
+                initialize();
+                boolean success = true;
+                String message = "Catégorie mise à jour avec succès !";
+                String title = "SiteVisor | Succès";
+            } else {
+                boolean success = false;
+                String message = "Impossible de mettre à jour la catégorie ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickCategoryDeleteBtn() {
-        int id = this.categoryId;
-
-        boolean isDeleted = this.categoryManager.deleteCategory(id);
-
-        if (isDeleted) {
-            initialize();
-            System.out.println("Category deleted successfully");
+        if (this.categoryId == null) {
+            boolean success = false;
+            String message = "Veuillez selectionner une catégorie !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to delete category");
+            boolean success = false;
+            String message = "Voulez-vous vraiment supprimer cette catégorie ?";
+            String title = "SiteVisor | Suppression";
+            PopupController popupController = LoadPopUp.loadPopup(success, message, title);
+            if (popupController.isDeletionConfirmed() ) {
+                int id = this.categoryId;
+
+                boolean isDeleted = this.categoryManager.deleteCategory(id);
+
+                if (isDeleted) {
+                    initialize();
+                    boolean successDeleted = true;
+                    String messageDeleted = "Catégorie supprimée avec succès !";
+                    String titleDeleted = "SiteVisor | Succès";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                } else {
+                    boolean successDeleted = false;
+                    String messageDeleted = "Impossible de supprimer la catégorie ! Veuillez réessayer.";
+                    String titleDeleted = "SiteVisor | Erreur";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                }
+            } else {
+                initialize();
+            }
         }
     }
 
     @FXML
     private void onClickSubcategoryAddBtn() {
-        String name = this.subcategoryNameTextField.getText();
-
-        String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
-        String[] split = associatedCategoryChoiceBoxValue.split(" - ");
-        int associatedCategoryId = Integer.parseInt(split[0]);
-
-        Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
-
-        Subcategory subcategory = new Subcategory(0, name, associatedCategory);
-
-        boolean isInserted = this.subcategoryManager.insertSubcategory(subcategory);
-
-        if (isInserted) {
-            initialize();
-            System.out.println("Subcategory created successfully");
+        if(this.subcategoryNameTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to create subcategory");
+            String name = this.subcategoryNameTextField.getText();
+
+            String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+            String[] split = associatedCategoryChoiceBoxValue.split(" - ");
+            int associatedCategoryId = Integer.parseInt(split[0]);
+
+            Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
+
+            Subcategory subcategory = new Subcategory(0, name, associatedCategory);
+
+            boolean isInserted = this.subcategoryManager.insertSubcategory(subcategory);
+
+            if (isInserted) {
+                initialize();
+                boolean success = true;
+                String message = "Sous-catégorie ajoutée avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible d'ajouter la sous-catégorie ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickSubcategoryModifyBtn() {
-        int id = this.subcategoryId;
-        String name = this.subcategoryNameTextField.getText();
-
-        String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
-        String[] split = associatedCategoryChoiceBoxValue.split(" - ");
-        int associatedCategoryId = Integer.parseInt(split[0]);
-
-        Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
-
-        Subcategory subcategory = new Subcategory(id, name, associatedCategory);
-
-        boolean isUpdated = this.subcategoryManager.updateSubcategory(subcategory);
-
-        if (isUpdated) {
-            initialize();
-            System.out.println("Subcategory updated successfully");
+        if( this.subcategoryId == null ||  this.subcategoryNameTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to update subcategory");
+            int id = this.subcategoryId;
+            String name = this.subcategoryNameTextField.getText();
+
+            String associatedCategoryChoiceBoxValue = this.associatedCategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+            String[] split = associatedCategoryChoiceBoxValue.split(" - ");
+            int associatedCategoryId = Integer.parseInt(split[0]);
+
+            Category associatedCategory = this.categoryManager.getCategoryById(associatedCategoryId);
+
+            Subcategory subcategory = new Subcategory(id, name, associatedCategory);
+
+            boolean isUpdated = this.subcategoryManager.updateSubcategory(subcategory);
+
+            if (isUpdated) {
+                initialize();
+                boolean success = true;
+                String message = "Sous-catégorie mise à jour avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible de mettre à jour la sous-catégorie ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickSubcategoryDeleteBtn() {
-        int id = this.subcategoryId;
-
-        boolean isDeleted = this.subcategoryManager.deleteSubcategory(id);
-
-        if (isDeleted) {
-            initialize();
-            System.out.println("Subcategory deleted successfully");
+        if(this.subcategoryId == null) {
+            boolean success = false;
+            String message = "Veuillez sélectionner une sous-catégorie !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to delete subcategory");
+            boolean success = false;
+            String message = "Voulez-vous vraiment supprimer cette sous-catégorie ?";
+            String title = "SiteVisor | Suppression";
+            PopupController popupController = LoadPopUp.loadPopup(success, message, title);
+            if ( popupController.isDeletionConfirmed() ) {
+                int id = this.subcategoryId;
+
+                boolean isDeleted = this.subcategoryManager.deleteSubcategory(id);
+
+                if (isDeleted) {
+                    initialize();
+                    boolean successDeleted = true;
+                    String messageDeleted = "Sous-catégorie supprimée avec succès !";
+                    String titleDeleted = "SiteVisor | Succès";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                } else {
+                    boolean successDeleted = false;
+                    String messageDeleted = "Impossible de supprimer la sous-catégorie ! Veuillez réessayer.";
+                    String titleDeleted = "SiteVisor | Erreur";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                }
+            } else {
+                initialize();
+            }
         }
     }
 
     @FXML
     private void onClickTaskAddBtn() {
-        String name = this.taskNameTextField.getText();
-        String description = this.taskDescriptionTextField.getText();
-
-        String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
-        String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
-        int subcategoryId = Integer.parseInt(split[0]);
-
-        Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
-
-        Task task = new Task(0, name, description, associatedSubcategory);
-
-        boolean isInserted = this.taskManager.insertTask(task);
-
-        if (isInserted) {
-            initialize();
-            System.out.println("Task created successfully");
+        if (this.taskNameTextField.getText().isEmpty() || this.taskDescriptionTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to create task");
+            String name = this.taskNameTextField.getText();
+            String description = this.taskDescriptionTextField.getText();
+
+            String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+            String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
+            int subcategoryId = Integer.parseInt(split[0]);
+
+            Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
+
+            Task task = new Task(0, name, description, associatedSubcategory);
+
+            boolean isInserted = this.taskManager.insertTask(task);
+
+            if (isInserted) {
+                initialize();
+                boolean success = true;
+                String message = "Tâche ajoutée avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible d'ajouter la tâche ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickTaskModifyBtn() {
-        int id = this.taskId;
-        String name = this.taskNameTextField.getText();
-        String description = this.taskDescriptionTextField.getText();
-
-        String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
-        String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
-        int subcategoryId = Integer.parseInt(split[0]);
-
-        Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
-
-        Task task = new Task(id, name, description, associatedSubcategory);
-
-        boolean isUpdated = this.taskManager.updateTask(task);
-
-        if (isUpdated) {
-            initialize();
-            System.out.println("Task updated successfully");
+        if(this.taskId == null || this.taskNameTextField.getText().isEmpty() || this.taskDescriptionTextField.getText().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to update task");
+            int id = this.taskId;
+            String name = this.taskNameTextField.getText();
+            String description = this.taskDescriptionTextField.getText();
+
+            String associatedSubcategoryChoiceBoxValue = this.associatedSubcategoryChoiceBox.getSelectionModel().getSelectedItem().toString();
+            String[] split = associatedSubcategoryChoiceBoxValue.split(" - ");
+            int subcategoryId = Integer.parseInt(split[0]);
+
+            Subcategory associatedSubcategory = this.subcategoryManager.getSubcategoryById(subcategoryId);
+
+            Task task = new Task(id, name, description, associatedSubcategory);
+
+            boolean isUpdated = this.taskManager.updateTask(task);
+
+            if (isUpdated) {
+                initialize();
+                boolean success = true;
+                String message = "Tâche mise à jour avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible de mettre à jour la tâche ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickTaskDeleteBtn() {
-        int id = this.taskId;
-
-        boolean isDeleted = this.taskManager.deleteTask(id);
-
-        if (isDeleted) {
-            initialize();
-            System.out.println("Task deleted successfully");
+        if(this.taskId == null) {
+            boolean success = false;
+            String message = "Veuillez sélectionner une tâche !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Failed to delete task");
+            boolean success = false;
+            String message = "Voulez-vous vraiment supprimer cette tâche ?";
+            String title = "SiteVisor | Suppression";
+            PopupController popupController = LoadPopUp.loadPopup(success, message, title);
+            if (popupController.isDeletionConfirmed() ) {
+                int id = this.taskId;
+
+                boolean isDeleted = this.taskManager.deleteTask(id);
+
+                if (isDeleted) {
+                    initialize();
+                    boolean successDeleted = true;
+                    String messageDeleted = "Tâche supprimée avec succès !";
+                    String titleDeleted = "SiteVisor | Succès";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                } else {
+                    boolean successDeleted = false;
+                    String messageDeleted = "Impossible de supprimer la tâche ! Veuillez réessayer.";
+                    String titleDeleted = "SiteVisor | Erreur";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                }
+            }
         }
     }
 
