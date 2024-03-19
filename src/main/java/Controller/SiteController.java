@@ -13,6 +13,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.geometry.*;
 
@@ -164,7 +165,7 @@ public class SiteController {
                     taskLabel.setMinWidth(120);
                     taskLabel.setPrefWidth(150);
                     taskLabel.setMaxWidth(200);
-                    taskLabel.setPadding(new javafx.geometry.Insets(10, 20, 10, 20));
+                    taskLabel.setPadding(new javafx.geometry.Insets(5, 10, 5, 10));
 
                     tasksGridPane.addRow(tasksGridPane.getRowCount(), taskLabel);
                 }

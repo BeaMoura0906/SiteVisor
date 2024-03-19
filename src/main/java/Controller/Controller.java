@@ -15,6 +15,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import util.LoadPopUp;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -126,71 +127,121 @@ public class Controller {
 
     @FXML
     private void onChangeEditSiteTab() {
+        this.siteNameTextField.clear();
+        this.siteTypeTextField.clear();
+        this.siteClientTextField.clear();
+        this.siteAddressTextField.clear();
+        this.siteStartDatePicker.setValue(null);
+        this.siteEndDatePicker.setValue(null);
+
         setUpSiteChoiceBox();
     }
 
     @FXML
     private void onClickSiteAddBtn() {
-        String name = siteNameTextField.getText();
-        String type = siteTypeTextField.getText();
-        String client = siteClientTextField.getText();
-        String address = siteAddressTextField.getText();
-        LocalDate startDate = siteStartDatePicker.getValue();
-        String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate endDate = siteEndDatePicker.getValue();
-        String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        // To change with authentication
-        int userId = 1;
-
-        Site site = new Site(0, name, type, client, address, startDateFormatted, endDateFormatted, userId);
-        boolean isInserted = this.siteManager.insertSite(site);
-
-        // Ajouter pop up pour champs non remplis
-        // Ajouter pop up pour success
-
-        if (isInserted) {
-            onChangeEditSiteTab();
-            System.out.println("Site inserted successfully");
+        if (siteNameTextField.getText().isEmpty() || siteTypeTextField.getText().isEmpty() || siteClientTextField.getText().isEmpty() || siteAddressTextField.getText().isEmpty() || siteStartDatePicker.getValue() == null || siteEndDatePicker.getValue() == null) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Could not insert site");
+            String name = siteNameTextField.getText();
+            String type = siteTypeTextField.getText();
+            String client = siteClientTextField.getText();
+            String address = siteAddressTextField.getText();
+            LocalDate startDate = siteStartDatePicker.getValue();
+            String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate endDate = siteEndDatePicker.getValue();
+            String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            // To change with authentication
+            int userId = 1;
+
+            Site site = new Site(0, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+            boolean isInserted = this.siteManager.insertSite(site);
+
+            if (isInserted) {
+                onChangeEditSiteTab();
+                boolean success = true;
+                String message = "Chantier ajouté avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible d'ajouter le chantier ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickSiteModifyBtn() {
-        String name = siteNameTextField.getText();
-        String type = siteTypeTextField.getText();
-        String client = siteClientTextField.getText();
-        String address = siteAddressTextField.getText();
-        LocalDate startDate = siteStartDatePicker.getValue();
-        String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate endDate = siteEndDatePicker.getValue();
-        String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-
-        // To change with authentication
-        int userId = 1;
-
-        Site site = new Site(siteId, name, type, client, address, startDateFormatted, endDateFormatted, userId);
-        boolean isUpdated = this.siteManager.updateSite(site);
-
-        if (isUpdated) {
-            onChangeEditSiteTab();
-            System.out.println("Site updated successfully");
+        if( siteChoiceBox.getSelectionModel().isEmpty() || siteNameTextField.getText().isEmpty() || siteTypeTextField.getText().isEmpty() || siteClientTextField.getText().isEmpty() || siteAddressTextField.getText().isEmpty() || siteStartDatePicker.getValue() == null || siteEndDatePicker.getValue() == null) {
+            boolean success = false;
+            String message = "Veuillez renseigner tous les champs !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Could not update site");
+            String name = siteNameTextField.getText();
+            String type = siteTypeTextField.getText();
+            String client = siteClientTextField.getText();
+            String address = siteAddressTextField.getText();
+            LocalDate startDate = siteStartDatePicker.getValue();
+            String startDateFormatted = startDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate endDate = siteEndDatePicker.getValue();
+            String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
+            // To change with authentication
+            int userId = 1;
+
+            Site site = new Site(siteId, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+            boolean isUpdated = this.siteManager.updateSite(site);
+
+            if (isUpdated) {
+                onChangeEditSiteTab();
+                boolean success = true;
+                String message = "Chantier mis à jour avec succès !";
+                String title = "SiteVisor | Succès";
+                LoadPopUp.loadPopup(success, message, title);
+            } else {
+                boolean success = false;
+                String message = "Impossible de mettre à jour le chantier ! Veuillez réessayer.";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+            }
         }
     }
 
     @FXML
     private void onClickSiteDeleteBtn() {
-        boolean isDeleted = this.siteManager.deleteSite(siteId);
-
-        if (isDeleted) {
-            onChangeEditSiteTab();
-            System.out.println("Site deleted successfully");
+        if (siteChoiceBox.getSelectionModel().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez sélectionner un chantier !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
         } else {
-            System.out.println("Could not delete site");
+            boolean success = false;
+            String message = "Voulez-vous vraiment supprimer ce chantier ?";
+            String title = "SiteVisor | Suppression";
+            PopupController popupController = LoadPopUp.loadPopup(success, message, title);
+            if (popupController.isDeletionConfirmed() ) {
+                boolean isDeleted = this.siteManager.deleteSite(siteId);
+                if (isDeleted) {
+                    onChangeEditSiteTab();
+                    boolean successDeleted = true;
+                    String messageDeleted = "Chantier supprimé avec succès !";
+                    String titleDeleted = "SiteVisor | Succès";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                } else {
+                    boolean successDeleted = false;
+                    String messageDeleted = "Impossible de supprimer le chantier ! Veuillez réessayer.";
+                    String titleDeleted = "SiteVisor | Erreur";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                }
+            } else {
+                onChangeEditSiteTab();
+            }
         }
     }
 
@@ -298,4 +349,5 @@ public class Controller {
             }
         });
     }
+
 }
