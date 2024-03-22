@@ -3,18 +3,30 @@ package Controller;
 import Model.Entity.Document;
 import Model.Entity.Site;
 import Model.Manager.DocumentManager;
+import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.VBox;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import util.LoadPopUp;
-
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
@@ -63,7 +75,47 @@ public class DocController {
 
     @FXML
     private void onClickVisualizeFileBtn() {
+        if ( this.docChoiceBox.getSelectionModel().isEmpty() ) {
+            boolean success = false;
+            String message= "Veuillez sélectionner un document !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
+        } else {
+            Document document = this.docChoiceBox.getSelectionModel().getSelectedItem();
+            DocPopupController docPopupController = loadDocPopup(document);
+        }
+    }
 
+    private static DocPopupController loadDocPopup(Document document) {
+        FXMLLoader loader = new FXMLLoader(LoadPopUp.class.getResource("/com/example/sitevisor/docpopup-view.fxml"));
+        DocPopupController docPopupController = new DocPopupController(document);
+        loader.setController(docPopupController);
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        docPopupController.initialize();
+
+        Stage popupStage = new Stage();
+        popupStage.setTitle("SiteVisor | Document");
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(root));
+        popupStage.show();
+
+        return docPopupController;
+    }
+
+    private String extractResourcePath(String absolutePath) {
+        int index = absolutePath.indexOf("resources/");
+        if (index != -1) {
+            System.out.println(absolutePath.substring(index + "resources/".length() - 1));
+            return absolutePath.substring(index + "resources/".length() - 1);
+        } else {
+            System.err.println("Chemin absolu incorrect. Impossible d'extraire le chemin des ressources.");
+            return "";
+        }
     }
 
     @FXML
@@ -139,16 +191,6 @@ public class DocController {
                 e.printStackTrace();
             }
         }
-    }
-
-    private boolean isImage(File file) {
-        String fileName = file.getName().toLowerCase();
-        return fileName.endsWith(".jpg") || fileName.endsWith(".jpeg") || fileName.endsWith(".png");
-    }
-
-    private boolean isPDF(File file) {
-        String fileName = file.getName().toLowerCase();
-        return fileName.endsWith(".pdf");
     }
 
     public boolean containsNoSpaceOrExtension(String str) {
