@@ -16,10 +16,13 @@
                   <Insets left="40.0" right="30.0" />
                </HBox.margin>
             </ImageView>
-            <Label fx:id="messageLabel" text="messageLabel" wrapText="true"/>
+            <Label fx:id="messageLabel" text="messageLabel" wrapText="true">
+               <HBox.margin>
+                  <Insets right="20.0" top="10.0" />
+               </HBox.margin></Label>
          </children>
       </HBox>
-      <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickOkBtn" prefHeight="26.0" prefWidth="71.0" text="Ok" fx:id="okBtn">
+      <Button fx:id="okBtn" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#onClickOkBtn" prefHeight="26.0" prefWidth="71.0" text="Ok">
          <VBox.margin>
             <Insets top="10.0" />
          </VBox.margin></Button>

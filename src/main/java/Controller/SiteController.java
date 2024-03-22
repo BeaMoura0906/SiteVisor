@@ -10,6 +10,7 @@ import Model.Manager.SubcategoryManager;
 import Model.Manager.TaskManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -45,6 +46,8 @@ public class SiteController {
     private HBox tasksHBox;
     @FXML
     private Tab editTab;
+    @FXML
+    private Tab docTab;
 
     SiteManager siteManager = new SiteManager();
     CategoryManager categoryManager = new CategoryManager();
@@ -85,7 +88,15 @@ public class SiteController {
 
     @FXML
     private void onChangeDocTab() {
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/doc-view.fxml"));
+        DocController docController = new DocController(this.site);
+        loader.setController(docController);
+        try {
+            this.docTab.setContent(loader.load());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        docController.initialize();
     }
 
     private void setSiteLabels(Site site) {

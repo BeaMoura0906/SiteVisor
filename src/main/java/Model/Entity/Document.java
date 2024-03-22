@@ -36,4 +36,5 @@ public class Document {
     public void setType(String type) { this.type = type; }
     public void setPath(String path) { this.path = path; }
     public void setSite(Site site) { this.site = site; }
+    public String toString() { return name + "." + type; }
 }
