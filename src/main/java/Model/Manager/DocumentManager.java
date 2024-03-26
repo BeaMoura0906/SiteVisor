@@ -96,4 +96,27 @@ public class DocumentManager {
 
         return isInserted;
     }
+
+    /**
+     * Deletes a document from the database
+     *
+     * @param documentId the id of the document to be deleted
+     * @return a boolean value indicating whether the document was deleted successfully
+     */
+    public boolean deleteDocument(int documentId) {
+        boolean isDeleted = false;
+        String query = "DELETE FROM documents WHERE id = ?";
+        try {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, documentId);
+            statement.executeUpdate();
+            if (statement.getUpdateCount() > 0) {
+                isDeleted = true;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return isDeleted;
+    }
+
 }

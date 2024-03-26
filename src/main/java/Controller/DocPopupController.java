@@ -28,6 +28,7 @@ import java.nio.file.Paths;
 import java.util.Objects;
 
 import javafx.embed.swing.SwingFXUtils;
+import util.LoadPopUp;
 
 import java.awt.image.BufferedImage;
 
@@ -69,9 +70,12 @@ public class DocPopupController {
                 imageView.setImage(image);
                 imageView.setFitWidth(image.getWidth() * ratio);
                 imageView.setFitHeight(image.getHeight() * ratio);
-                System.out.println("image loaded successfully.");
             } else {
-                System.out.println("Impossible de charger l'image.");
+                boolean success = false;
+                String message = "Le document n'a pas pu etre charge !";
+                String title = "SiteVisor | Erreur";
+                LoadPopUp.loadPopup(success, message, title);
+                this.stage.close();
             }
 
             docVBox.alignmentProperty().setValue(Pos.TOP_CENTER);
@@ -84,37 +88,34 @@ public class DocPopupController {
                 PDFRenderer renderer = new PDFRenderer(doc);
 
                 ScrollPane scrollPane = new ScrollPane();
-                VBox pagesContainer = new VBox(); // Conteneur pour stocker les ImageView de chaque page
-                scrollPane.setContent(pagesContainer); // Ajout du conteneur dans la ScrollPane
-                scrollPane.setFitToWidth(true); // Ajustement automatique à la largeur de la fenêtre
+                VBox pagesContainer = new VBox();
+                scrollPane.setContent(pagesContainer);
+                scrollPane.setFitToWidth(true);
+                scrollPane.setMaxHeight(750);
 
                 for (PDPage page : doc.getPages()) {
-                    BufferedImage bufferedImage = renderer.renderImageWithDPI(doc.getPages().indexOf(page), 100); // Réduire la résolution DPI
+                    BufferedImage bufferedImage = renderer.renderImageWithDPI(doc.getPages().indexOf(page), 100);
                     javafx.scene.image.Image image = SwingFXUtils.toFXImage(bufferedImage, null);
                     ImageView imageView = new ImageView(image);
-                    imageView.setPreserveRatio(true); // Conserver le ratio d'aspect lors du redimensionnement
-                    imageView.setFitWidth(600); // Ajustez la largeur de l'image à 600 pixels (par exemple)
-                    pagesContainer.getChildren().add(imageView); // Ajout de l'ImageView à pagesContainer
+                    imageView.setPreserveRatio(true);
+                    imageView.setFitWidth(600);
+                    pagesContainer.getChildren().add(imageView);
                 }
 
                 docVBox.alignmentProperty().setValue(Pos.TOP_CENTER);
                 docVBox.getChildren().clear();
-                docVBox.getChildren().add(scrollPane); // Ajout de la ScrollPane au docVBox
+                docVBox.getChildren().add(scrollPane);
 
                 doc.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
         }
     }
 
     private String extractResourcePath(String absolutePath) {
         int index = absolutePath.indexOf("resources/");
         if (index != -1) {
-            System.out.println(absolutePath.substring(index + "resources/".length() - 1));
             return absolutePath.substring(index + "resources/".length() - 1);
         } else {
             System.err.println("Chemin absolu incorrect. Impossible d'extraire le chemin des ressources.");

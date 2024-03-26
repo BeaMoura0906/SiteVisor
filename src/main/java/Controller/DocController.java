@@ -3,7 +3,6 @@ package Controller;
 import Model.Entity.Document;
 import Model.Entity.Site;
 import Model.Manager.DocumentManager;
-import javafx.concurrent.Worker;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,21 +11,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import util.LoadPopUp;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
@@ -59,18 +52,7 @@ public class DocController {
     public void initialize() {
         setDocChoiceBox();
 
-        this.docChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                this.visualizeFileBtn.setDisable(false);
-                this.deleteFileBtn.setDisable(false);
-            }
-        });
-    }
 
-    private void setDocChoiceBox() {
-        List<Document> documents = this.documentManager.getAllDocumentsBySite(this.site);
-        this.docChoiceBox.getItems().clear();
-        this.docChoiceBox.getItems().addAll(documents);
     }
 
     @FXML
@@ -86,41 +68,66 @@ public class DocController {
         }
     }
 
-    private static DocPopupController loadDocPopup(Document document) {
-        FXMLLoader loader = new FXMLLoader(LoadPopUp.class.getResource("/com/example/sitevisor/docpopup-view.fxml"));
-        DocPopupController docPopupController = new DocPopupController(document);
-        loader.setController(docPopupController);
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        docPopupController.initialize();
-
-        Stage popupStage = new Stage();
-        popupStage.setTitle("SiteVisor | Document");
-        popupStage.initModality(Modality.APPLICATION_MODAL);
-        popupStage.setScene(new Scene(root));
-        popupStage.show();
-
-        return docPopupController;
-    }
-
-    private String extractResourcePath(String absolutePath) {
-        int index = absolutePath.indexOf("resources/");
-        if (index != -1) {
-            System.out.println(absolutePath.substring(index + "resources/".length() - 1));
-            return absolutePath.substring(index + "resources/".length() - 1);
-        } else {
-            System.err.println("Chemin absolu incorrect. Impossible d'extraire le chemin des ressources.");
-            return "";
-        }
-    }
-
     @FXML
     private void onClickDeleteFileBtn() {
+        if (this.docChoiceBox.getSelectionModel().isEmpty()) {
+            boolean success = false;
+            String message = "Veuillez sélectionner un document !";
+            String title = "SiteVisor | Erreur";
+            LoadPopUp.loadPopup(success, message, title);
+        } else {
+            boolean success = false;
+            String message = "Voulez-vous vraiment supprimer ce document ?";
+            String title = "SiteVisor | Suppression";
+            PopupController popupController = LoadPopUp.loadPopup(success, message, title);
+            if (popupController.isDeletionConfirmed()) {
+                Document selectedDocument = this.docChoiceBox.getSelectionModel().getSelectedItem();
+                String filePath = selectedDocument.getPath();
+                File document = new File(filePath);
+                boolean isMoved = false;
+                if (document.exists()) {
+                    try {
+                        String parentDirectory = document.getParent();
 
+                        String archiveFolder = parentDirectory + File.separator + "archive";
+                        File archiveDir = new File(archiveFolder);
+                        if (!archiveDir.exists()) {
+                            archiveDir.mkdirs();
+                        }
+
+                        Path sourcePath = Paths.get(filePath);
+                        Path destinationPath = Paths.get(archiveFolder, document.getName());
+
+                        Files.move(sourcePath, destinationPath);
+                        isMoved = true;
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        System.err.println("Erreur lors du déplacement du document vers le dossier d'archive.");
+                    }
+                } else {
+                    System.err.println("Le document spécifié n'existe pas.");
+                }
+
+                boolean isDeletedFromDB = false;
+                if (isMoved) {
+                    int documentId = selectedDocument.getId();
+                    isDeletedFromDB = this.documentManager.deleteDocument(documentId);
+                }
+
+                if (isDeletedFromDB) {
+                    boolean successDeleted = true;
+                    String messageDeleted = "Document supprimé avec succès !";
+                    String titleDeleted = "SiteVisor | Succès";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                    setDocChoiceBox();
+                } else {
+                    boolean successDeleted = false;
+                    String messageDeleted = "Impossible de supprimer le document ! Veuillez réessayer.";
+                    String titleDeleted = "SiteVisor | Erreur";
+                    LoadPopUp.loadPopup(successDeleted, messageDeleted, titleDeleted);
+                }
+            }
+        }
     }
 
     @FXML
@@ -193,6 +200,18 @@ public class DocController {
         }
     }
 
+    private void setDocChoiceBox() {
+        List<Document> documents = this.documentManager.getAllDocumentsBySite(this.site);
+        this.docChoiceBox.getItems().clear();
+        this.docChoiceBox.getItems().addAll(documents);
+
+        this.docChoiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                this.visualizeFileBtn.setDisable(false);
+                this.deleteFileBtn.setDisable(false);
+            }
+        });
+    }
     public boolean containsNoSpaceOrExtension(String str) {
         if (str.contains(" ")) {
             return false;
@@ -234,5 +253,25 @@ public class DocController {
             return "png";
         }
         return "";
+    }
+
+    private static DocPopupController loadDocPopup(Document document) {
+        FXMLLoader loader = new FXMLLoader(LoadPopUp.class.getResource("/com/example/sitevisor/docpopup-view.fxml"));
+        DocPopupController docPopupController = new DocPopupController(document);
+        loader.setController(docPopupController);
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        Stage popupStage = new Stage();
+        popupStage.setTitle("SiteVisor | Document");
+        popupStage.initModality(Modality.APPLICATION_MODAL);
+        popupStage.setScene(new Scene(root));
+        popupStage.show();
+
+        return docPopupController;
     }
 }
