@@ -8,16 +8,35 @@ import Model.Manager.CategoryManager;
 import Model.Manager.SiteManager;
 import Model.Manager.SubcategoryManager;
 import Model.Manager.TaskManager;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.geometry.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -48,6 +67,10 @@ public class SiteController {
     private Tab editTab;
     @FXML
     private Tab docTab;
+    @FXML
+    private VBox siteVBox;
+    @FXML
+    private Button printBtn;
 
     SiteManager siteManager = new SiteManager();
     CategoryManager categoryManager = new CategoryManager();
@@ -57,7 +80,6 @@ public class SiteController {
     public SiteController(Site site) {
         this.site = site;
     }
-
     @FXML
     public void initialize() {
         onChangeSiteTab();
@@ -97,6 +119,52 @@ public class SiteController {
             throw new RuntimeException(e);
         }
         docController.initialize();
+    }
+
+    @FXML
+    private void onClickPrintBtn() {
+        Scene scene = this.printBtn.getScene();
+        Stage stage = (Stage) scene.getWindow();
+        stage.setFullScreen(true);
+
+        this.printBtn.setVisible(false);
+
+        WritableImage image = this.siteVBox.snapshot(new SnapshotParameters(), null);
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le fichier");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+        File file = fileChooser.showSaveDialog(new Stage());
+
+        if (file != null) {
+            try (PDDocument document = new PDDocument()) {
+                PDPage page = new PDPage(new PDRectangle((float) image.getWidth(), (float) image.getHeight()));
+                document.addPage(page);
+
+                PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageIO.write(bufferedImage, "png", baos);
+                byte[] imageBytes = baos.toByteArray();
+
+                PDImageXObject pdImage = PDImageXObject.createFromByteArray(document, imageBytes, "image");
+
+                contentStream.drawImage(pdImage, (float) 0, (float) 0, (float) image.getWidth(), (float) image.getHeight());
+                contentStream.close();
+
+                document.save(file);
+
+                Desktop.getDesktop().open(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        this.printBtn.setVisible(true);
+
+        stage.setFullScreen(false);
     }
 
     private void setSiteLabels(Site site) {

@@ -299,7 +299,10 @@ public class Controller {
                     Stage siteStage = new Stage();
                     siteStage.setTitle("SiteVisor | Chantier : " + selectedSite.getName());
                     siteStage.initModality(Modality.APPLICATION_MODAL);
-                    siteStage.setScene(new Scene(root));
+                    Scene scene = new Scene(root);
+                    siteStage.setMinWidth(1000);
+                    siteStage.setMinHeight(650);
+                    siteStage.setScene(scene);
                     siteStage.show();
 
                 }
