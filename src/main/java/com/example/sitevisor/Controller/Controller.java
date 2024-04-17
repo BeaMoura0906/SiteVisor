@@ -153,10 +153,7 @@ public class Controller {
             LocalDate endDate = siteEndDatePicker.getValue();
             String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            // To change with authentication
-            int userId = 1;
-
-            Site site = new Site(0, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+            Site site = new Site(0, name, type, client, address, startDateFormatted, endDateFormatted);
             boolean isInserted = this.siteManager.insertSite(site);
 
             if (isInserted) {
@@ -191,10 +188,7 @@ public class Controller {
             LocalDate endDate = siteEndDatePicker.getValue();
             String endDateFormatted = endDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
-            // To change with authentication
-            int userId = 1;
-
-            Site site = new Site(siteId, name, type, client, address, startDateFormatted, endDateFormatted, userId);
+            Site site = new Site(siteId, name, type, client, address, startDateFormatted, endDateFormatted);
             boolean isUpdated = this.siteManager.updateSite(site);
 
             if (isUpdated) {
