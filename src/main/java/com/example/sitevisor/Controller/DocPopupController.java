@@ -1,34 +1,22 @@
-package Controller;
+package com.example.sitevisor.Controller;
 
-import Model.Entity.Document;
-import javafx.concurrent.Worker;
+import com.example.sitevisor.Model.Entity.Document;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
-import javax.swing.*;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Objects;
 
 import javafx.embed.swing.SwingFXUtils;
-import util.LoadPopUp;
+import com.example.sitevisor.util.LoadPopUp;
 
 import java.awt.image.BufferedImage;
 

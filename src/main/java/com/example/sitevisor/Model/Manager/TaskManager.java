@@ -1,9 +1,9 @@
-package Model.Manager;
+package com.example.sitevisor.Model.Manager;
 
-import Model.Entity.Category;
-import Model.Entity.Site;
-import Model.Entity.Subcategory;
-import Model.Entity.Task;
+import com.example.sitevisor.Model.Entity.Category;
+import com.example.sitevisor.Model.Entity.Site;
+import com.example.sitevisor.Model.Entity.Subcategory;
+import com.example.sitevisor.Model.Entity.Task;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

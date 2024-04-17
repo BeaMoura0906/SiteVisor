@@ -1,4 +1,4 @@
-package Model.Entity;
+package com.example.sitevisor.Model.Entity;
 
 public class Task {
     private int id;

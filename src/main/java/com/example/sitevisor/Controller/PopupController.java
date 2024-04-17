@@ -1,4 +1,4 @@
-package Controller;
+package com.example.sitevisor.Controller;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

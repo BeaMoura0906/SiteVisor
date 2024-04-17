@@ -18,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<VBox fx:id="vBoxTableSites" alignment="TOP_CENTER" minHeight="500.0" minWidth="900.0" prefHeight="685.0" prefWidth="1200.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Controller">
+<VBox fx:id="vBoxTableSites" alignment="TOP_CENTER" minHeight="500.0" minWidth="900.0" prefHeight="685.0" prefWidth="1200.0" spacing="20.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sitevisor.Controller.Controller">
    <children>
       <TabPane prefHeight="585.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>

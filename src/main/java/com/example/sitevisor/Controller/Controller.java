@@ -1,8 +1,7 @@
-package Controller;
+package com.example.sitevisor.Controller;
 
-import Model.Entity.Site;
-import Model.Manager.SiteManager;
-import javafx.beans.Observable;
+import com.example.sitevisor.Model.Entity.Site;
+import com.example.sitevisor.Model.Manager.SiteManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,7 +14,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import util.LoadPopUp;
+import com.example.sitevisor.util.LoadPopUp;
 
 import java.io.IOException;
 import java.time.LocalDate;

@@ -1,6 +1,6 @@
 package com.example.sitevisor;
 
-import Model.Manager.Manager;
+import com.example.sitevisor.Model.Manager.Manager;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

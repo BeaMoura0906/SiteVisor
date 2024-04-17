@@ -1,4 +1,4 @@
-package Model.Manager;
+package com.example.sitevisor.Model.Manager;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

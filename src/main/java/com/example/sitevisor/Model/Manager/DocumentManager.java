@@ -1,7 +1,7 @@
-package Model.Manager;
+package com.example.sitevisor.Model.Manager;
 
-import Model.Entity.Document;
-import Model.Entity.Site;
+import com.example.sitevisor.Model.Entity.Document;
+import com.example.sitevisor.Model.Entity.Site;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

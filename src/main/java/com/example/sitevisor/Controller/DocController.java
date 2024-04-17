@@ -1,8 +1,8 @@
-package Controller;
+package com.example.sitevisor.Controller;
 
-import Model.Entity.Document;
-import Model.Entity.Site;
-import Model.Manager.DocumentManager;
+import com.example.sitevisor.Model.Entity.Document;
+import com.example.sitevisor.Model.Entity.Site;
+import com.example.sitevisor.Model.Manager.DocumentManager;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import util.LoadPopUp;
+import com.example.sitevisor.util.LoadPopUp;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;

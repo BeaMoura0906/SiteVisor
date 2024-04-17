@@ -1,8 +1,6 @@
-package util;
+package com.example.sitevisor.util;
 
-import Controller.PopupController;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import com.example.sitevisor.Controller.PopupController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

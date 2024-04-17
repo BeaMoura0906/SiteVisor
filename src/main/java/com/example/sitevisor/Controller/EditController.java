@@ -1,20 +1,20 @@
-package Controller;
+package com.example.sitevisor.Controller;
 
-import Model.Entity.Category;
-import Model.Entity.Site;
-import Model.Entity.Subcategory;
-import Model.Entity.Task;
-import Model.Manager.CategoryManager;
-import Model.Manager.SiteManager;
-import Model.Manager.SubcategoryManager;
-import Model.Manager.TaskManager;
+import com.example.sitevisor.Model.Entity.Category;
+import com.example.sitevisor.Model.Entity.Site;
+import com.example.sitevisor.Model.Entity.Subcategory;
+import com.example.sitevisor.Model.Entity.Task;
+import com.example.sitevisor.Model.Manager.CategoryManager;
+import com.example.sitevisor.Model.Manager.SiteManager;
+import com.example.sitevisor.Model.Manager.SubcategoryManager;
+import com.example.sitevisor.Model.Manager.TaskManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
-import util.LoadPopUp;
+import com.example.sitevisor.util.LoadPopUp;
 
 import java.util.List;
 

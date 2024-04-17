@@ -14,7 +14,7 @@ module com.example.sitevisor {
 
     opens com.example.sitevisor to javafx.fxml;
     exports com.example.sitevisor;
-    exports Controller;
-    opens Controller to javafx.fxml;
-    opens Model.Entity to javafx.base;
+    exports com.example.sitevisor.Controller;
+    opens com.example.sitevisor.Controller to javafx.fxml;
+    opens com.example.sitevisor.Model.Entity to javafx.base;
 }
