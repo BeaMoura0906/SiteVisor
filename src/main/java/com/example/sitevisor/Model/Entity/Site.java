@@ -8,7 +8,6 @@ public class Site {
     private String address;
     private String startDate;
     private String endDate;
-    private int userId;
 
     /**
      * Constructor for Site
@@ -19,9 +18,8 @@ public class Site {
      * @param address
      * @param startDate
      * @param endDate
-     * @param userId
      */
-    public Site(int id, String name, String type, String client, String address, String startDate, String endDate, int userId) {
+    public Site(int id, String name, String type, String client, String address, String startDate, String endDate) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -29,7 +27,6 @@ public class Site {
         this.address = address;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.userId = userId;
     }
 
     // Getters
@@ -40,7 +37,6 @@ public class Site {
     public String getAddress() { return address; }
     public String getStartDate() { return startDate; }
     public String getEndDate() { return endDate; }
-    public int getUserId() { return userId; }
 
     // Setters
     public void setId(int id) { this.id = id; }
@@ -50,6 +46,5 @@ public class Site {
     public void setAddress(String address) { this.address = address; }
     public void setStartDate(String startDate) { this.startDate = startDate; }
     public void setEndDate(String endDate) { this.endDate = endDate; }
-    public void setUserId(int userId) { this.userId = userId; }
 }
 

@@ -36,9 +36,8 @@ public class SiteManager {
                 String address = resultSet.getString("address");
                 String startDate = resultSet.getString("start_date");
                 String endDate = resultSet.getString("end_date");
-                int userId = resultSet.getInt("user_id");
 
-                Site site = new Site(id, name, type, client, address, startDate, endDate, userId);
+                Site site = new Site(id, name, type, client, address, startDate, endDate);
                 sites.add(site);
             }
         } catch (SQLException e) {
@@ -71,9 +70,8 @@ public class SiteManager {
                 String address = resultSet.getString("address");
                 String startDate = resultSet.getString("start_date");
                 String endDate = resultSet.getString("end_date");
-                int userId = resultSet.getInt("user_id");
 
-                site = new Site(id, name, type, client, address, startDate, endDate, userId);
+                site = new Site(id, name, type, client, address, startDate, endDate);
 
             }
 
@@ -92,7 +90,7 @@ public class SiteManager {
      */
     public boolean insertSite(Site site){
         boolean isInserted = false;
-        String query = "INSERT INTO sites (name, type, client, address, start_date, end_date, user_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO sites (name, type, client, address, start_date, end_date) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -102,7 +100,6 @@ public class SiteManager {
             statement.setString(4, site.getAddress());
             statement.setString(5, site.getStartDate());
             statement.setString(6, site.getEndDate());
-            statement.setInt(7, site.getUserId());
 
             if (statement.executeUpdate() > 0) {
                 isInserted = true;
@@ -122,7 +119,7 @@ public class SiteManager {
      */
     public boolean updateSite(Site site){
         boolean isUpdated = false;
-        String query = "UPDATE sites SET name=?, type=?, client=?, address=?, start_date=?, end_date=?, user_id=? WHERE id=?";
+        String query = "UPDATE sites SET name=?, type=?, client=?, address=?, start_date=?, end_date=? WHERE id=?";
 
         try {
             PreparedStatement statement = connection.prepareStatement(query);
@@ -132,7 +129,6 @@ public class SiteManager {
             statement.setString(4, site.getAddress());
             statement.setString(5, site.getStartDate());
             statement.setString(6, site.getEndDate());
-            statement.setInt(7, site.getUserId());
             statement.setInt(8, site.getId());
 
             if (statement.executeUpdate() > 0) {
