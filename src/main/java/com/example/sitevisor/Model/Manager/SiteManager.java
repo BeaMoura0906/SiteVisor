@@ -129,7 +129,7 @@ public class SiteManager {
             statement.setString(4, site.getAddress());
             statement.setString(5, site.getStartDate());
             statement.setString(6, site.getEndDate());
-            statement.setInt(8, site.getId());
+            statement.setInt(7, site.getId());
 
             if (statement.executeUpdate() > 0) {
                 isUpdated = true;

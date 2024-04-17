@@ -22,7 +22,7 @@
    <children>
       <TabPane prefHeight="585.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
-          <Tab onSelectionChanged="#onChangeSitesTab" style="-fx-font-weight: bold;" text="Chantiers">
+          <Tab fx:id="tabSites" onSelectionChanged="#onChangeSitesTab" style="-fx-font-weight: bold;" text="Chantiers">
             <content>
               <VBox alignment="TOP_CENTER" minHeight="0.0" minWidth="0.0" prefHeight="614.0" prefWidth="1200.0" HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
                      <children>
@@ -83,7 +83,7 @@
                                     <Insets right="20.0" />
                                  </HBox.margin>
                               </DatePicker>
-                              <Button mnemonicParsing="false" onAction="#onClickSearchButton" text="Rechercher" />
+                              <Button fx:id="searchButton" mnemonicParsing="false" onAction="#onClickSearchButton" text="Rechercher" />
                            </children>
                            <padding>
                               <Insets left="20.0" />
