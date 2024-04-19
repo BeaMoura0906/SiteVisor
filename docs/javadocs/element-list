@@ -1,0 +1,6 @@
+module:com.example.sitevisor
+com.example.sitevisor
+com.example.sitevisor.Controller
+com.example.sitevisor.Model.Entity
+com.example.sitevisor.Model.Manager
+com.example.sitevisor.util
