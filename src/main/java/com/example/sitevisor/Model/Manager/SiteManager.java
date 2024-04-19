@@ -9,9 +9,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SiteManager class that manages the retrieval of sites from the database.
+ */
 public class SiteManager {
+
+    /**
+     * Property that represents the connection to the database.
+     */
     private Connection connection;
 
+    /**
+     * SiteManager constructor that get the instance of the connection to the database.
+     */
     public SiteManager() {
         // Get a connection instance from the Manager class
         this.connection = Manager.getInstance().getConnection();

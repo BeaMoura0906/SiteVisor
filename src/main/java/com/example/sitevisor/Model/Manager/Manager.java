@@ -4,9 +4,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Manager class to manage database connections. This class is a singleton class that can be accessed using the getInstance() method to obtain connections to the database.
+ */
 public class Manager {
 
+    /**
+     * Private static instance of Manager.
+     */
     private static Manager instance;
+    /**
+     * Private connection to the database.
+     */
     private Connection connection;
 
     /**

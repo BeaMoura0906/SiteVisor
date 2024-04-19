@@ -20,27 +20,54 @@ import com.example.sitevisor.util.LoadPopUp;
 
 import java.awt.image.BufferedImage;
 
-
+/**
+ * DocPopupController class is used to display a document in a popup window.
+ */
 public class DocPopupController {
 
+    /**
+     * Properties
+     */
     private Stage stage;
     private Document document;
+
+    /**
+     * FXML elements
+     */
     @FXML
     private VBox docVBox;
 
+    /**
+     * DocPopupController constructor that initializes the document to display.
+     *
+     * @param document the document to display
+     */
     public DocPopupController(Document document) {
         this.document = document;
     }
 
+    /**
+     * FXML method that initializes the popup window. It loads the document and displays it in the popup window.
+     */
     @FXML
     public void initialize() {
         showDocument(this.document);
     }
 
+    /**
+     * Method that sets the stage.
+     *
+     * @param stage the stage
+     */
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
+    /**
+     * Method that displays the document in the popup window. It extracts the resource path of the document and displays it in the popup window.
+     *
+     * @param document the document to display
+     */
     public void showDocument(Document document) {
         String filePath = document.getPath();
 
@@ -101,6 +128,12 @@ public class DocPopupController {
         }
     }
 
+    /**
+     * Method that extracts the resource path of the document.
+     *
+     * @param absolutePath the absolute path of the document
+     * @return the resource path
+     */
     private String extractResourcePath(String absolutePath) {
         int index = absolutePath.indexOf("resources/");
         if (index != -1) {

@@ -9,7 +9,17 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 
 import java.io.IOException;
 
+/**
+ * App class is the main class of the application.
+ */
 public class App extends Application {
+
+    /**
+     * Method that starts the application.
+     *
+     * @param stage the primary stage of the application
+     * @throws IOException if an error occurs while loading the FXML file
+     */
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource("app-view.fxml"));
@@ -20,6 +30,11 @@ public class App extends Application {
         stage.show();
     }
 
+    /**
+     * Method that starts the application. It closes the database connection at the end of the application.
+     *
+     * @param args the arguments for the application (ignored)
+     */
     public static void main(String[] args) {
         launch();
 

@@ -10,10 +10,19 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
 
+/**
+ * CategoryManager class for managing categories in the database.
+ */
 public class CategoryManager {
 
+    /**
+     * Property that represents the connection to the database.
+     */
     private Connection connection;
 
+    /**
+     * CategoryManager constructor that get the instance of the connection to the database.
+     */
     public CategoryManager() {
         // Get a connection instance from the Manager class
         this.connection = Manager.getInstance().getConnection();

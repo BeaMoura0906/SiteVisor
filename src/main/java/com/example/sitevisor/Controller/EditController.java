@@ -20,6 +20,9 @@ import java.util.List;
 
 public class EditController {
 
+    /**
+     * Properties
+     */
     private Site site;
     private SiteManager siteManager = new SiteManager();
     private CategoryManager categoryManager = new CategoryManager();
@@ -30,6 +33,9 @@ public class EditController {
     private Integer subcategoryId;
     private Integer taskId;
 
+    /**
+     * FXML elements
+     */
     @FXML
     private ChoiceBox categoryChoiceBox;
     @FXML
@@ -67,10 +73,17 @@ public class EditController {
     @FXML
     private Button taskDeleteBtn;
 
+    /**
+     * EditController constructor that sets the site property with the selected site
+     * @param site
+     */
     public EditController(Site site) {
         this.site = site;
     }
 
+    /**
+     * FXML method that initializes the view and sets up the choice boxes to edit tasks, subcategories and categories
+     */
     @FXML
     public void initialize() {
         setUpCategoryChoiceBox();
@@ -78,6 +91,9 @@ public class EditController {
         setUpTaskChoiceBox();
     }
 
+    /**
+     * FXML method that is called when the user clicks the "add button and adds a new category to the database
+     */
     @FXML
     private void onClickCategoryAddBtn() {
         if(this.categoryNameTextField.getText().isEmpty()) {
@@ -106,6 +122,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the modify button and updates the selected category in the database
+     */
     @FXML
     private void onClickCategoryModifyBtn() {
         if( this.categoryId == null ||  this.categoryNameTextField.getText().isEmpty()) {
@@ -134,6 +153,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the delete button and deletes the selected category from the database
+     */
     @FXML
     private void onClickCategoryDeleteBtn() {
         if (this.categoryId == null) {
@@ -169,6 +191,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the add button and adds a new subcategory to the database
+     */
     @FXML
     private void onClickSubcategoryAddBtn() {
         if(this.subcategoryNameTextField.getText().isEmpty()) {
@@ -204,6 +229,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the modify button and modifies the selected subcategory in the database
+     */
     @FXML
     private void onClickSubcategoryModifyBtn() {
         if( this.subcategoryId == null ||  this.subcategoryNameTextField.getText().isEmpty()) {
@@ -240,6 +268,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the delete button and deletes the selected subcategory from the database
+     */
     @FXML
     private void onClickSubcategoryDeleteBtn() {
         if(this.subcategoryId == null) {
@@ -275,6 +306,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the add button and adds a new task to the database
+     */
     @FXML
     private void onClickTaskAddBtn() {
         if (this.taskNameTextField.getText().isEmpty() || this.taskDescriptionTextField.getText().isEmpty()) {
@@ -311,6 +345,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the modify button and modifies the selected task in the database
+     */
     @FXML
     private void onClickTaskModifyBtn() {
         if(this.taskId == null || this.taskNameTextField.getText().isEmpty() || this.taskDescriptionTextField.getText().isEmpty()) {
@@ -348,6 +385,9 @@ public class EditController {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the delete button and deletes the selected task from the database
+     */
     @FXML
     private void onClickTaskDeleteBtn() {
         if(this.taskId == null) {
@@ -381,6 +421,9 @@ public class EditController {
         }
     }
 
+    /**
+     * Method that sets up the category choice box
+     */
     private void setUpCategoryChoiceBox() {
         List<Category> categoriesBySite = this.categoryManager.getAllCategoriesBySite(this.site);
         ObservableList<String> categoryItems = FXCollections.observableArrayList();
@@ -414,6 +457,9 @@ public class EditController {
         });
     }
 
+    /**
+     * Method that sets up the subcategory choice box
+     */
     private void setUpSubcategoryChoiceBox() {
         List<Subcategory> subcategoriesBySite = this.subcategoryManager.getAllSubcategoriesBySite(this.site);
         ObservableList<String> subcategoryItems = FXCollections.observableArrayList();
@@ -449,6 +495,9 @@ public class EditController {
         });
     }
 
+    /**
+     * Method that sets up the task choice box
+     */
     private void setUpTaskChoiceBox() {
         List<Task> tasksBySite = this.taskManager.getAllTasksBySite(this.site);
         ObservableList<String> taskItems = FXCollections.observableArrayList();

@@ -1,6 +1,13 @@
 package com.example.sitevisor.Model.Entity;
 
+/**
+ * Site is an entity that represents a construction site.
+ */
 public class Site {
+
+    /**
+     * Properties
+     */
     private int id;
     private String name;
     private String type;
@@ -29,7 +36,9 @@ public class Site {
         this.endDate = endDate;
     }
 
-    // Getters
+    /**
+     * Getters
+     */
     public int getId() { return id; }
     public String getName() { return name; }
     public String getType() { return type; }
@@ -38,7 +47,9 @@ public class Site {
     public String getStartDate() { return startDate; }
     public String getEndDate() { return endDate; }
 
-    // Setters
+    /**
+     * Setters
+     */
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setType(String type) { this.type = type; }

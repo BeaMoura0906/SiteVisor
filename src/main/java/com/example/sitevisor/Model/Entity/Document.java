@@ -1,6 +1,13 @@
 package com.example.sitevisor.Model.Entity;
 
+/**
+ * Document is an entity that represents a file associated with a site.
+ */
 public class Document {
+
+    /**
+     * Properties
+     */
     private int id;
     private String name;
     private String type;
@@ -23,14 +30,18 @@ public class Document {
         this.site = site;
     }
 
-    // Getters
+    /**
+     * Getters
+     */
     public int getId() { return id; }
     public String getName() { return name; }
     public String getType() { return type; }
     public String getPath() { return path; }
     public Site getSite() { return site; }
 
-    // Setters
+    /**
+     * Setters
+     */
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setType(String type) { this.type = type; }

@@ -1,5 +1,8 @@
 package com.example.sitevisor.Model.Entity;
 
+/**
+ * Task is an entity that represents a task of a subcategory.
+ */
 public class Task {
     private int id;
     private String name;
@@ -20,13 +23,17 @@ public class Task {
         this.subcategory = subcategory;
     }
 
-    // Getters
+    /**
+     * Getters
+     */
     public int getId() { return id; }
     public String getName() { return name; }
     public String getDescription() { return description; }
     public Subcategory getSubcategory() { return subcategory; }
 
-    // Setters
+    /**
+     * Setters
+     */
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setDescription(String description) { this.description = description; }

@@ -12,10 +12,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * TaskManager class that manages tasks in the database.
+ */
 public class TaskManager {
 
+    /**
+     * Property that represents the connection to the database.
+     */
     private Connection connection;
 
+    /**
+     * TaskManager constructor that get the instance of the connection to the database.
+     */
     public TaskManager() {
         // Get a connection instance from the Manager class
         this.connection = Manager.getInstance().getConnection();

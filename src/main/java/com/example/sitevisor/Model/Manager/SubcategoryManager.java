@@ -11,10 +11,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * SubcategoryManager class that provides methods for managing subcategories in the database.
+ */
 public class SubcategoryManager {
 
+    /**
+     * Property that represents the connection to the database.
+     */
     private Connection connection;
 
+    /**
+     * Subcategory constructor that get the instance of the connection to the database.
+     */
     public SubcategoryManager() {
         // Get a connection instance from the Manager class
         this.connection = Manager.getInstance().getConnection();

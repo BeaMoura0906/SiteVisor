@@ -42,7 +42,14 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public class SiteController {
+    /**
+     * Properties
+     */
     private Site site;
+
+    /**
+     * FXML elements
+     */
     @FXML
     private Label idSiteLabel;
     @FXML
@@ -70,18 +77,34 @@ public class SiteController {
     @FXML
     private Button printBtn;
 
+    /**
+     * Instances of managers
+     */
     SiteManager siteManager = new SiteManager();
     CategoryManager categoryManager = new CategoryManager();
     SubcategoryManager subcategoryManager = new SubcategoryManager();
     TaskManager taskManager = new TaskManager();
 
+    /**
+     * SiteController constructor that receives a site as parameter and sets it as the current site in the controller instance.
+     *
+     * @param site The selected site.
+     */
     public SiteController(Site site) {
         this.site = site;
     }
+
+    /**
+     * FXML method that initializes the controller. This method calls the onChangeSiteTab FXML method.
+     */
     @FXML
     public void initialize() {
         onChangeSiteTab();
     }
+
+    /**
+     * FXML method that updates the site labels and progress bar. This method also calls the showTasksPane method to show the tasks for the selected site.
+     */
     @FXML
     private void onChangeSiteTab() {
         this.site = this.siteManager.getSiteById(this.site.getId());
@@ -92,6 +115,9 @@ public class SiteController {
         showTasksPane(this.site);
     }
 
+    /**
+     * FXML method that changes the content when the edit tab is clicked. It loads the edit form view and sets it as the content of the edit tab.
+     */
     @FXML
     private void onChangeEditTab() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/edit-view.fxml"));
@@ -106,6 +132,9 @@ public class SiteController {
 
     }
 
+    /**
+     * FXML method that changes the content when the doc tab is clicked. It loads the doc view and sets it as the content of the doc tab.
+     */
     @FXML
     private void onChangeDocTab() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/sitevisor/doc-view.fxml"));
@@ -119,6 +148,9 @@ public class SiteController {
         docController.initialize();
     }
 
+    /**
+     * FXML method that prints the screenshot of the site and the organized tasks and saves it as a PDF file.
+     */
     @FXML
     private void onClickPrintBtn() {
         Scene scene = this.printBtn.getScene();
@@ -165,6 +197,11 @@ public class SiteController {
         stage.setFullScreen(false);
     }
 
+    /**
+     * Method that sets the site labels.
+     *
+     * @param site The selected site.
+     */
     private void setSiteLabels(Site site) {
         idSiteLabel.setText("#" + String.valueOf(site.getId()));
         nameSiteLabel.setText(site.getName());
@@ -175,6 +212,11 @@ public class SiteController {
         endDateSiteLabel.setText(site.getEndDate());
     }
 
+    /**
+     * Method that updates the progress bar based on the start date and end date of the site and the current date.
+     *
+     * @param site The selected site.
+     */
     private void updateProgressBar(Site site) {
         LocalDate startLocalDate = LocalDate.parse(site.getStartDate(), DateTimeFormatter.ISO_LOCAL_DATE);
         LocalDate endLocalDate = LocalDate.parse(site.getEndDate(), DateTimeFormatter.ISO_LOCAL_DATE);
@@ -187,6 +229,11 @@ public class SiteController {
         progressBar.setProgress(progress);
     }
 
+    /**
+     * Method that shows the tasks pane for the selected site organized by categories and subcategories.
+     *
+     * @param site The selected site.
+     */
     private void showTasksPane(Site site) {
         // Add categories to tasks pane
         List<Category> categoriesList = categoryManager.getAllCategoriesBySite(site);

@@ -10,10 +10,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * DocumentManager class provides methods for managing documents in the database.
+ */
 public class DocumentManager {
 
+    /**
+     * Property that represents the connection to the database.
+     */
     private Connection connection;
 
+    /**
+     * DocumentManager class constructor that get the instance of the connection to the database.
+     */
     public DocumentManager() {
         // Get a connection instance from the Manager class
         this.connection = Manager.getInstance().getConnection();

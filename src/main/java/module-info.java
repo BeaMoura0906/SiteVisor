@@ -1,3 +1,6 @@
+/**
+ * Module for SiteVisor application. It requires all JavaFX modules, pdfbox, java.sql, java.desktop, org.kordamp.bootstrapfx.core and org.controlsfx.controls. It opens all FXML files and opens and exports all controllers and entities classes.
+ */
 module com.example.sitevisor {
     requires javafx.controls;
     requires javafx.fxml;

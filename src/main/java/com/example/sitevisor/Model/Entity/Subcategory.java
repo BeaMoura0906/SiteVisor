@@ -1,6 +1,13 @@
 package com.example.sitevisor.Model.Entity;
 
+/**
+ * Subcategory is an entity that represents a subcategory of a category.
+ */
 public class Subcategory {
+
+    /**
+     * Properties
+     */
     private int id;
     private String name;
     private Category category;
@@ -17,12 +24,16 @@ public class Subcategory {
         this.category = category;
     }
 
-    // Getters
+    /**
+     * Getters
+     */
     public int getId() { return id; }
     public String getName() { return name; }
     public Category getCategory() { return category; }
 
-    // Setters
+    /**
+     * Setters
+     */
     public void setId(int id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setCategory(Category category) { this.category = category; }

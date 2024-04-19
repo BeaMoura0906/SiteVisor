@@ -23,11 +23,21 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 
+/**
+ * Document Controller to manage documents associated to a site
+ */
 public class DocController {
 
+    /**
+     * Properties
+     */
     private Site site;
     private DocumentManager documentManager;
     private File selectedFile;
+
+    /**
+     * FXML Properties
+     */
     @FXML
     private ChoiceBox<Document> docChoiceBox;
     @FXML
@@ -43,18 +53,26 @@ public class DocController {
     @FXML
     private Button addFileBtn;
 
+    /**
+     * Document Controller constructor to initialize the properties in fonction of the site selected and to manage the documents
+     * @param site
+     */
     public DocController(Site site) {
         this.site = site;
         this.documentManager = new DocumentManager();
     }
 
+    /**
+     * FXML Method to initialize the view with the document choice box
+     */
     @FXML
     public void initialize() {
         setDocChoiceBox();
-
-
     }
 
+    /**
+     * FXML Method to handle the click on the visualize file button and call the DocPopupController to display the document.
+     */
     @FXML
     private void onClickVisualizeFileBtn() {
         if ( this.docChoiceBox.getSelectionModel().isEmpty() ) {
@@ -68,6 +86,9 @@ public class DocController {
         }
     }
 
+    /**
+     * FXML Method to handle the click on the delete file button and delete the selected document.
+     */
     @FXML
     private void onClickDeleteFileBtn() {
         if (this.docChoiceBox.getSelectionModel().isEmpty()) {
@@ -130,6 +151,9 @@ public class DocController {
         }
     }
 
+    /**
+     * FXML Method to handle the click on the load file button and open a file chooser to select a file.
+     */
     @FXML
     private void onClickLoadFileBtn() {
         FileChooser fileChooser = new FileChooser();
@@ -146,6 +170,9 @@ public class DocController {
         }
     }
 
+    /**
+     * FXML Method to handle the click on the add file button and add the selected file to the database.
+     */
     @FXML
     private void onClickAddFileBtn() {
         String fileName = this.fileNameTextField.getText().trim();
@@ -200,6 +227,9 @@ public class DocController {
         }
     }
 
+    /**
+     * Method to set the document choice box with the list of documents associated to the site
+     */
     private void setDocChoiceBox() {
         List<Document> documents = this.documentManager.getAllDocumentsBySite(this.site);
         this.docChoiceBox.getItems().clear();
@@ -212,6 +242,12 @@ public class DocController {
             }
         });
     }
+
+    /**
+     * Method to verify if the file name contains no space and no extension
+     * @param str file name
+     * @return true if the file name contains no space and no extension
+     */
     public boolean containsNoSpaceOrExtension(String str) {
         if (str.contains(" ")) {
             return false;
@@ -225,6 +261,12 @@ public class DocController {
         return true;
     }
 
+    /**
+     * Method to get the extension of the file
+     *
+     * @param fileName file name
+     * @return the extension
+     */
     private String getFileExtension(String fileName) {
         int lastDotIndex = fileName.lastIndexOf('.');
         if (lastDotIndex > 0 && lastDotIndex < fileName.length() - 1) {
@@ -233,6 +275,12 @@ public class DocController {
         return "";
     }
 
+    /**
+     * Method to get the file name without extension and without space.
+     *
+     * @param fileName file name
+     * @return the file name without extension and without space
+     */
     private String getFileNameWithoutExtensionAndWithoutSpace(String fileName) {
         int dotIndex = fileName.lastIndexOf(".");
         if (dotIndex != -1) {
@@ -241,6 +289,12 @@ public class DocController {
         return fileName.replaceAll("\\s", "");
     }
 
+    /**
+     * Method to get the type of the file.
+     *
+     * @param file file
+     * @return the type of the file
+     */
     private String getTypeOfFile(File file) {
         String fileName = file.getName().toLowerCase();
         if ( fileName.endsWith(".pdf") ) {
@@ -255,6 +309,12 @@ public class DocController {
         return "";
     }
 
+    /**
+     * Method to load the doc popup controller.
+     *
+     * @param document the document to display
+     * @return the doc popup controller with the document to display
+     */
     private static DocPopupController loadDocPopup(Document document) {
         FXMLLoader loader = new FXMLLoader(LoadPopUp.class.getResource("/com/example/sitevisor/docpopup-view.fxml"));
         DocPopupController docPopupController = new DocPopupController(document);

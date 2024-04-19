@@ -22,13 +22,22 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Controller class for the main view of the application that displays the list of sites in a table, search for sites, and add, modify, and delete sites.
+ */
 public class Controller {
 
+    /**
+     * Properties of the controller
+     */
     private List<Site> sites;
     private int siteId;
 
     SiteManager siteManager = new SiteManager();
 
+    /**
+     * FXML elements
+     */
     @FXML
     private VBox vBoxTableSites;
     @FXML
@@ -70,6 +79,9 @@ public class Controller {
     @FXML
     private Button siteDeleteBtn;
 
+    /**
+     * FXML method that is called when the user changes the tab of the main view. It updates the list of sites and the table.
+     */
     @FXML
     private void onChangeSitesTab() {
 
@@ -83,6 +95,9 @@ public class Controller {
         setRowDoubleClickListener();
     }
 
+    /**
+     * FXML method that is called when the user clicks the search button. It searches for sites that match the specified criteria and updates the table.
+     */
     @FXML
     private void onClickSearchButton() {
         String name = nameSearch.getText();
@@ -124,6 +139,9 @@ public class Controller {
         endDateSearch.setValue(null);
     }
 
+    /**
+     * FXML method that is called when the user changes the tab of the edit site view. It displays the site edit form and clears the text fields and updates the site choice box.
+     */
     @FXML
     private void onChangeEditSiteTab() {
         this.siteNameTextField.clear();
@@ -136,6 +154,9 @@ public class Controller {
         setUpSiteChoiceBox();
     }
 
+    /**
+     * FXML method that is called when the user clicks the add site button. It validates the input and adds a new site to the database.
+     */
     @FXML
     private void onClickSiteAddBtn() {
         if (siteNameTextField.getText().isEmpty() || siteTypeTextField.getText().isEmpty() || siteClientTextField.getText().isEmpty() || siteAddressTextField.getText().isEmpty() || siteStartDatePicker.getValue() == null || siteEndDatePicker.getValue() == null) {
@@ -171,6 +192,9 @@ public class Controller {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the modify site button. It validates the input and updates the selected site in the database.
+     */
     @FXML
     private void onClickSiteModifyBtn() {
         if( siteChoiceBox.getSelectionModel().isEmpty() || siteNameTextField.getText().isEmpty() || siteTypeTextField.getText().isEmpty() || siteClientTextField.getText().isEmpty() || siteAddressTextField.getText().isEmpty() || siteStartDatePicker.getValue() == null || siteEndDatePicker.getValue() == null) {
@@ -206,6 +230,9 @@ public class Controller {
         }
     }
 
+    /**
+     * FXML method that is called when the user clicks the delete site button. It validates the input and deletes the selected site from the database.
+     */
     @FXML
     private void onClickSiteDeleteBtn() {
         if (siteChoiceBox.getSelectionModel().isEmpty()) {
@@ -238,6 +265,9 @@ public class Controller {
         }
     }
 
+    /**
+     * Method that sets up the table view.
+     */
     private void setUpTableView() {
         TableColumn<Site, Integer> idCol = (TableColumn<Site, Integer>) tableSites.getColumns().get(0);
         TableColumn<Site, String> nameCol = (TableColumn<Site, String>) tableSites.getColumns().get(1);
@@ -270,6 +300,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Method that sets the row double-click listener to open the tasks view for the selected site.
+     */
     private void setRowDoubleClickListener() {
         // Set row double-click listener
         tableSites.setRowFactory(tv -> {
@@ -304,6 +337,9 @@ public class Controller {
         });
     }
 
+    /**
+     * Method that sets up the site choice box.
+     */
     private void setUpSiteChoiceBox() {
         this.sites = this.siteManager.getAllSites();
 
