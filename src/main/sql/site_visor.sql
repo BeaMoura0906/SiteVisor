@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le : lun. 22 avr. 2024 à 07:41
+-- Généré le : lun. 22 avr. 2024 à 07:48
 -- Version du serveur : 8.2.0
 -- Version de PHP : 7.4.33
 
@@ -20,6 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `site_visor`
 --
+CREATE DATABASE IF NOT EXISTS `site_visor` DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci;
+USE `site_visor`;
 
 -- --------------------------------------------------------
 
