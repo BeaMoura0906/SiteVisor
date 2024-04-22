@@ -23,7 +23,7 @@ Pour installer SiteVisor, suivez ces étapes :
 ```bash
 git clone https://github.com/BeaMoura0906/SiteVisor.git
 ```
-2. Configurez votre base de données en utilisant le fichier SQL `sitevisor.sql` dans le répertoire `src/main/sql/`.
+2. Configurez votre base de données en utilisant le fichier SQL `site_visor.sql` dans le répertoire `src/main/sql/`.
 3. Ouvrez le projet l'IDE.
 
 ## Configuration
@@ -60,22 +60,31 @@ Pour accéder à la documentation des classes Java, ouvrez le fichier `index.htm
 
 ## Utilisation
 
-Lancez l'application en exécutant le fichier `App.java`.
+- Lancez l'application en exécutant le fichier `App.java`.
 
-Consultez la liste des chantiers et utilisez la barre de recherche pour filtrer les chantiers visualisés dans la liste.
+- Consultez la liste des chantiers et utilisez la barre de recherche pour filtrer les chantiers visualisés dans la liste.
+
 ![HomePage](/screens/HomePage.png)
 
-Editez des chantiers (ajout, modification, suppression)
+- Editez des chantiers (ajout, modification, suppression)
+
 ![AddSitePage](/screens/AddSitePage.png)
 
-Pop up d'erreur de saisie
+- Pop up d'erreur de saisie
+
 ![ErrorPopUp](/screens/ErrorPopUp.png)
 
-Visualiser de planning chantier avec une organisation des tâches en catégorie et sous-catégorie
+- Visualiser de planning chantier avec une organisation des tâches en catégorie et sous-catégorie
+
 ![SitePlanningPage](/screens/SitePlanningPage.png)
 
-Editez des tâches, des sous-catégories et des catégories (ajout, modification, suppression)
+- Editez des tâches, des sous-catégories et des catégories (ajout, modification, suppression)
+
 ![EditTasksPage_empty](/screens/EditTasksPage_empty.png)
+
+- Associez des documents à un chantier et visualisez les. 
+
+![DocPage](/screens/DocPage.png)
 
 Pour plus de détails, n'hésitez pas à consulter les captures d'éccrans dans le répertoire `screens`.
 
