@@ -49,6 +49,8 @@ Pour exécuter les tests unitaires, localisez le package `com.example.SiteVisor`
 ```
 Exécutez les tests en utilisant la fonctionnalité de test intégrée de l'IDE.
 
+Pour les tests fonctionnels, consultez le fichier `FunctionalTests.pdf` dans le répertoire `src/test/functional`.
+
 ## Documentation
 
 Vous trouverez la documentation relative à ce projet dans le répertoire `docs` :
