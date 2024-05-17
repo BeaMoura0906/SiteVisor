@@ -97,4 +97,8 @@ Consultez les commits Git pour suivre l'évolution du développement depuis le d
 
 ## Auteur
 
-Beatriz Moura | BeaMoura0906
+Beatriz Moura - Développement initial | GitHub : @BeaMoura0906
+
+Ce projet a été réalisé dans le cadre de l'UE 5 "Conception et développement d'applications" du BTS SIO (Services Informatiques aux Organisations) option SLAM (Solutions Logicielles et Applications Métiers).
+
+E5 : Réalisation n° 2 | 18 juin 2024
